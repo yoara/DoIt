@@ -1,0 +1,34 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <LinearLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal" 
+        android:layout_weight="1">
+        
+        <Button
+            android:id="@+id/listcontent_go_back"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bt_listcontent_back" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:orientation="vertical" 
+        android:layout_weight="11">
+        
+	    <ListView
+	        android:id="@+id/listcontent_titles_lv"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content">
+	    </ListView>
+    </LinearLayout>
+
+</LinearLayout>

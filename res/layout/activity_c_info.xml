@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/iv_info_user"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:src="@android:drawable/btn_star" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_info_name" />
+
+    <EditText
+        android:hint="@string/ev_info_hint_name"
+        android:id="@+id/et_c_info_name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_info_birthday" />
+
+    <EditText
+        android:hint="@string/ev_info_hint_birthday"
+        android:id="@+id/et_c_info_editDate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_info_male" />
+
+    <EditText
+        android:hint="@string/ev_info_hint_male"
+        android:id="@+id/et_c_info_male"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:ems="10" />
+    
+
+    <CheckBox
+        android:id="@+id/cb_c_info_weibo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/tv_info_weibo" />
+    <Button
+	    android:id="@+id/bt_c_info_save"
+	    android:layout_width="fill_parent"
+	    android:layout_height="wrap_content"
+	    android:text="@string/bt_editcontent_save" />
+    <TextView 
+        android:id="@+id/tv_info_showAbout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/tv_info_about"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+</LinearLayout>
