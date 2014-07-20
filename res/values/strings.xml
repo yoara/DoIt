@@ -12,6 +12,7 @@
     <string name="bt_main_go_cancel">删除</string>
     <string name="bt_main_go_list">显示全部</string>
     <string name="bt_main_go_info">信息</string>
+    <string name="bt_main_go_function">附加测试</string>
     
     <!-- editcontent activity -->
     <string name="ev_editcontent_hint_title">标题</string>
@@ -36,4 +37,7 @@
     
     <!-- listcontent -->
     <string name="bt_listcontent_back">返回</string>
+    
+    <!-- testFunction -->
+    <string name="bt_function_sfa">SFA</string>
 </resources>

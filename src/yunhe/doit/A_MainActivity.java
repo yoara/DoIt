@@ -38,6 +38,7 @@ public class A_MainActivity extends Activity {
 	private Button mbtAdd;
 	private Button mbtInfo;
 	private Button mbtList;
+	private Button mbtFunction;
 	private GridView gridDate;
 	private LayoutInflater inflater;
 	private List<String> dataList = new ArrayList<String>();
@@ -58,6 +59,8 @@ public class A_MainActivity extends Activity {
 		mbtInfo.setOnClickListener(listener);
 		mbtList = (Button) findViewById(R.id.main_go_list);
 		mbtList.setOnClickListener(listener);
+		mbtFunction = (Button) findViewById(R.id.main_go_function);
+		mbtFunction.setOnClickListener(listener);
 		
 		adapter = new GridViewAdapter();
 		dataList = DateUtil.returnRoundMonth(dateRate);
@@ -216,6 +219,11 @@ public class A_MainActivity extends Activity {
 				Intent intent_list = new Intent(A_MainActivity.this,
 						B_ListContentActivity.class);
 				startActivity(intent_list);
+				break;
+			case R.id.main_go_function:
+				Intent intent_function = new Intent(A_MainActivity.this,
+						D_TestFunctionActivity.class);
+				startActivity(intent_function);
 				break;
 			default:
 				break;

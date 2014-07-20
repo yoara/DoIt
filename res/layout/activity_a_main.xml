@@ -28,6 +28,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/bt_main_go_list" />
+        <Button
+            android:id="@+id/main_go_function"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bt_main_go_function" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"

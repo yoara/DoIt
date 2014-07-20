@@ -15,37 +15,42 @@ public final class R {
         public static final int ic_launcher=0x7f020001;
     }
     public static final class id {
-        public static final int bt_c_info_save=0x7f070013;
-        public static final int bt_c_info_saveDate=0x7f07001b;
-        public static final int bt_c_male_boy=0x7f07001d;
-        public static final int bt_c_male_girl=0x7f07001c;
+        public static final int bt_c_info_save=0x7f070014;
+        public static final int bt_c_info_saveDate=0x7f07001c;
+        public static final int bt_c_male_boy=0x7f07001e;
+        public static final int bt_c_male_girl=0x7f07001d;
         public static final int bt_contentlist_goDelete=0x7f070002;
         public static final int bt_contentlist_goedit=0x7f070003;
-        public static final int bt_editcontent_saveDate=0x7f070019;
-        public static final int bt_saveContent=0x7f07000d;
-        public static final int cb_c_info_weibo=0x7f070012;
-        public static final int datepicker=0x7f070017;
-        public static final int dp_c_date_datePicker=0x7f07001a;
-        public static final int et_c_info_editDate=0x7f070010;
-        public static final int et_c_info_male=0x7f070011;
-        public static final int et_c_info_name=0x7f07000f;
-        public static final int et_editCont=0x7f07000c;
-        public static final int et_editDate=0x7f07000a;
-        public static final int et_editTime=0x7f07000b;
-        public static final int et_editTitle=0x7f070009;
-        public static final int iv_info_user=0x7f07000e;
-        public static final int listcontent_go_back=0x7f070015;
-        public static final int listcontent_titles_lv=0x7f070016;
-        public static final int main_date_gv=0x7f070007;
+        public static final int bt_editcontent_saveDate=0x7f07001a;
+        public static final int bt_function_sfa=0x7f07001f;
+        public static final int bt_saveContent=0x7f07000e;
+        public static final int cb_c_info_weibo=0x7f070013;
+        public static final int datepicker=0x7f070018;
+        public static final int dp_c_date_datePicker=0x7f07001b;
+        public static final int et_c_info_editDate=0x7f070011;
+        public static final int et_c_info_male=0x7f070012;
+        public static final int et_c_info_name=0x7f070010;
+        public static final int et_editCont=0x7f07000d;
+        public static final int et_editDate=0x7f07000b;
+        public static final int et_editTime=0x7f07000c;
+        public static final int et_editTitle=0x7f07000a;
+        public static final int et_function_sfa=0x7f070020;
+        public static final int iv_info_user=0x7f07000f;
+        public static final int listcontent_go_back=0x7f070016;
+        public static final int listcontent_titles_lv=0x7f070017;
+        public static final int main_date_gv=0x7f070008;
         public static final int main_date_item=0x7f070000;
         public static final int main_go_add=0x7f070005;
+        public static final int main_go_function=0x7f070007;
         public static final int main_go_info=0x7f070004;
         public static final int main_go_list=0x7f070006;
-        public static final int main_titles_lv=0x7f070008;
-        public static final int menu_settings=0x7f07001e;
-        public static final int timePicker=0x7f070018;
+        public static final int main_titles_lv=0x7f070009;
+        public static final int menu_settings=0x7f070023;
+        public static final int scrollView1=0x7f070021;
+        public static final int timePicker=0x7f070019;
         public static final int tv_contentlist_title=0x7f070001;
-        public static final int tv_info_showAbout=0x7f070014;
+        public static final int tv_function_sfa=0x7f070022;
+        public static final int tv_info_showAbout=0x7f070015;
     }
     public static final class layout {
         public static final int a_main_listitem_date=0x7f030000;
@@ -58,44 +63,50 @@ public final class R {
         public static final int c_info_about_dialog=0x7f030007;
         public static final int c_info_date_dialog=0x7f030008;
         public static final int c_info_male_dialog=0x7f030009;
+        public static final int d_function_1_sfa=0x7f03000a;
+        public static final int d_test_function_=0x7f03000b;
     }
     public static final class menu {
         public static final int activity_a_main=0x7f060000;
     }
     public static final class string {
         public static final int app_name=0x7f040000;
-        public static final int bt_editcontent_save=0x7f04000b;
-        public static final int bt_editcontent_selectDate=0x7f04000c;
-        public static final int bt_info_male_boy=0x7f040016;
-        public static final int bt_info_male_girl=0x7f040015;
+        public static final int bt_editcontent_save=0x7f04000c;
+        public static final int bt_editcontent_selectDate=0x7f04000d;
+        /**  testFunction 
+         */
+        public static final int bt_function_sfa=0x7f04001a;
+        public static final int bt_info_male_boy=0x7f040017;
+        public static final int bt_info_male_girl=0x7f040016;
         /**  listcontent 
          */
-        public static final int bt_listcontent_back=0x7f040018;
+        public static final int bt_listcontent_back=0x7f040019;
         public static final int bt_main_go_add=0x7f040004;
         public static final int bt_main_go_cancel=0x7f040006;
         public static final int bt_main_go_edit=0x7f040005;
+        public static final int bt_main_go_function=0x7f040009;
         public static final int bt_main_go_info=0x7f040008;
         public static final int bt_main_go_list=0x7f040007;
         /**  main activity 
          */
         public static final int bt_main_go_menu=0x7f040003;
-        public static final int ev_editcontent_hint_content=0x7f04000a;
+        public static final int ev_editcontent_hint_content=0x7f04000b;
         /**  editcontent activity 
          */
-        public static final int ev_editcontent_hint_title=0x7f040009;
-        public static final int ev_info_hint_birthday=0x7f040010;
-        public static final int ev_info_hint_male=0x7f040012;
-        public static final int ev_info_hint_name=0x7f04000e;
+        public static final int ev_editcontent_hint_title=0x7f04000a;
+        public static final int ev_info_hint_birthday=0x7f040011;
+        public static final int ev_info_hint_male=0x7f040013;
+        public static final int ev_info_hint_name=0x7f04000f;
         public static final int menu_settings=0x7f040001;
         public static final int title_activity_a_main=0x7f040002;
-        public static final int tv_info_about=0x7f040013;
-        public static final int tv_info_birthday=0x7f04000f;
-        public static final int tv_info_male=0x7f040011;
+        public static final int tv_info_about=0x7f040014;
+        public static final int tv_info_birthday=0x7f040010;
+        public static final int tv_info_male=0x7f040012;
         /**  info activity 
          */
-        public static final int tv_info_name=0x7f04000d;
-        public static final int tv_info_weibo=0x7f040014;
-        public static final int vt_info_about=0x7f040017;
+        public static final int tv_info_name=0x7f04000e;
+        public static final int tv_info_weibo=0x7f040015;
+        public static final int vt_info_about=0x7f040018;
     }
     public static final class style {
         public static final int AppTheme=0x7f050000;
