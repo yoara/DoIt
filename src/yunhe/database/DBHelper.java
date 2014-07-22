@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/** DBHelper封装了数据库新建或更新的方法 **/
 public class DBHelper extends SQLiteOpenHelper{
 
 	public DBHelper(Context context, String name, CursorFactory factory,

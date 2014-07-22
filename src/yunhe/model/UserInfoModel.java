@@ -3,6 +3,7 @@ package yunhe.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/** 用户信息表 **/
 public class UserInfoModel implements Parcelable {
 	public static final String TABLENAME = "DI_UserInfo";
 

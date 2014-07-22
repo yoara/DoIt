@@ -7,11 +7,13 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/** 用户信息表操作类 **/
 public class UserInfoDBUtil {
 	private final static int USER_INFO_ID = 1;
 	/***
 	 * 保存数据到数据库
-	 * @return
+	 * @param model 用户信息对象{@link UserInfoModel}
+	 * @param context 调用该操作的context
 	 */
 	public void saveToUserInfoDb(UserInfoModel model,Context context) {
 		ContentValues cv = packageContentValues(model);
@@ -24,7 +26,8 @@ public class UserInfoDBUtil {
 	}
 	/***
 	 * 更新数据到数据库
-	 * @return
+	 * @param model 用户信息对象{@link UserInfoModel}
+	 * @param context 调用该操作的context
 	 */
 	public void updateUserInfoDb(UserInfoModel model,Context context) {
 		ContentValues cv = packageContentValues(model);
@@ -52,7 +55,7 @@ public class UserInfoDBUtil {
 	
 	/***
 	 * 查询单个详细数据
-	 * @return
+	 * @param context 调用该操作的context
 	 */
 	public UserInfoModel queryUserInfoForDetail(Context context){
 		DBHelper sqler = new DBHelper

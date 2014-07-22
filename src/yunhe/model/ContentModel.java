@@ -3,6 +3,7 @@ package yunhe.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+/** 信息记录表 **/
 public class ContentModel implements Parcelable {
 	public static final String TABLENAME = "Content";
 

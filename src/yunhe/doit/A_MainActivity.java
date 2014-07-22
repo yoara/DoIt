@@ -40,19 +40,28 @@ public class A_MainActivity extends Activity {
 	private Button mbtList;
 	private Button mbtFunction;
 	private GridView gridDate;
-	private LayoutInflater inflater;
-	private List<String> dataList = new ArrayList<String>();
 	private ListView listTitle;
-	private DisplayMetrics dm = new DisplayMetrics();
+	
+	/** 日期栏的数据list **/
+	private List<String> dateList = new ArrayList<String>();
+	/** 信息栏的数据集合 **/
 	List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>();
-	private GridViewAdapter adapter ;
+	/** 偏差日期，初始加载为0 **/
 	private int dateRate = 0;
+	/** 日期栏的适配器，用于GridView容器的信息变更 **/
+	private GridViewAdapter adapter ;
+	/** 信息栏的适配器，用于信息ListView容器的信息变更 **/
 	private MySimpleAdapter listItemAdapter;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_a_main);
 
+		initView();
+	}
+	/** 初始化视图控件 **/
+	private void initView() {
 		mbtAdd = (Button) findViewById(R.id.main_go_add);
 		mbtAdd.setOnClickListener(listener);
 		mbtInfo = (Button) findViewById(R.id.main_go_info);
@@ -62,33 +71,34 @@ public class A_MainActivity extends Activity {
 		mbtFunction = (Button) findViewById(R.id.main_go_function);
 		mbtFunction.setOnClickListener(listener);
 		
-		adapter = new GridViewAdapter();
-		dataList = DateUtil.returnRoundMonth(dateRate);
+		initGridDateView();
+		
+		initListTitleView();
+	}
+
+	/** 初始化日期栏视图 **/
+	private void initGridDateView() {
 		gridDate = (GridView) findViewById(R.id.main_date_gv);
-		/*
-		 * inflate这个方法总共有四种形式，目的都是把xml表述的layout转化为View对象。
-		 * 在android中如果想将xml中的Layout转换为View放入.java代码中操作，
-		 * 只能通过Inflater，而不能通过findViewById()。
-		 */
-		inflater = (LayoutInflater) this
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		adapter = new GridViewAdapter();
 		gridDate.setAdapter(adapter);
-		int size = dataList.size();
+		
+		DisplayMetrics dm = new DisplayMetrics();
 		/*
 		 * DisplayMetrics可以得到分辨率等信息，方法如下：DisplayMetrics
 		 * metrics;getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		 * metrics.widthPixels 屏幕宽metrics.heightPixels 屏幕高metrics.density 屏幕密度
 		 */
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		dateList = DateUtil.returnRoundMonth(dateRate);
 		int allWidth = (int) (dm.widthPixels);
-		int itemWidth = (int) (dm.widthPixels / size);
+		int itemWidth = (int) (dm.widthPixels / dateList.size());
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				allWidth, LinearLayout.LayoutParams.FILL_PARENT);
 		gridDate.setLayoutParams(params);
 		gridDate.setColumnWidth(itemWidth);
 		gridDate.setHorizontalSpacing(0);
 		gridDate.setStretchMode(GridView.NO_STRETCH);
-		gridDate.setNumColumns(size);
+		gridDate.setNumColumns(dateList.size());
 		
 		gridDate.setOnTouchListener(new OnTouchListener() {
 			float x_tmp1 = 0.0f;
@@ -109,12 +119,12 @@ public class A_MainActivity extends Activity {
 						
 						if(x_tmp1 - x_tmp2 > 50){
 							dateRate = dateRate+5;
-							dataList = DateUtil.returnRoundMonth(dateRate);
+							dateList = DateUtil.returnRoundMonth(dateRate);
 							adapter.notifyDataSetChanged();
 						}
 						if(x_tmp2 - x_tmp1 > 50){
 							dateRate = dateRate-5;
-							dataList = DateUtil.returnRoundMonth(dateRate);
+							dateList = DateUtil.returnRoundMonth(dateRate);
 							adapter.notifyDataSetChanged();
 						}
 						break;
@@ -122,7 +132,10 @@ public class A_MainActivity extends Activity {
 				return false;
 			}
 		});
-		
+	}
+	
+	/** 初始化信息栏视图 **/
+	private void initListTitleView() {
 		//查询结果
 		ContentDBUtil dbUtil = new ContentDBUtil();
 		listItem = dbUtil.queryContentForList(
@@ -142,17 +155,24 @@ public class A_MainActivity extends Activity {
 		listTitle = (ListView) findViewById(R.id.main_titles_lv);
 		listTitle.setAdapter(listItemAdapter);
 	}
-
-	final class GridViewAdapter extends BaseAdapter {
-
+	
+	/** 日期栏的适配器，用于GridView容器的信息变更 **/
+	private class GridViewAdapter extends BaseAdapter {
+		/*
+		 * inflate这个方法总共有四种形式，目的都是把xml表述的layout转化为View对象。
+		 * 在android中如果想将xml中的Layout转换为View放入.java代码中操作，
+		 * 只能通过Inflater，而不能通过findViewById()。
+		 */
+		private LayoutInflater inflater = (LayoutInflater)
+				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		@Override
 		public int getCount() {
-			return dataList.size();
+			return dateList.size();
 		}
 
 		@Override
 		public Object getItem(int position) {
-			return dataList.get(position);
+			return dateList.get(position);
 		}
 
 		@Override
@@ -163,19 +183,28 @@ public class A_MainActivity extends Activity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			convertView = inflater.inflate(R.layout.a_main_listitem_date, null);
+			
 			TextView textView = (TextView) convertView
 					.findViewById(R.id.main_date_item);
-			final String str = dataList.get(position);
+			final String str = dateList.get(position);
 			textView.setText(str);
 			if(DateUtil.AROUNDDAY==position){
 				convertView.setBackgroundColor(Color.YELLOW);
 			}
+			final ViewGroup parent_final = parent;
 			convertView.setOnTouchListener((new OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
 					switch (event.getAction()){
 						case MotionEvent.ACTION_DOWN:
 							ContentDBUtil dbUtil = new ContentDBUtil();
+							for(int i=0;i<parent_final.getChildCount();i++){
+								if(parent_final.getChildAt(i)!=v){
+									parent_final.getChildAt(i).setBackgroundColor(Color.TRANSPARENT);
+								}
+							}
+							
+							v.setBackgroundColor(Color.YELLOW);
 							listItem.clear();
 							listItem.addAll(dbUtil.queryContentForList(
 									DateUtil.returnDDMMMEEETo_yyyy_MM_dd(str), A_MainActivity.this));
@@ -196,7 +225,7 @@ public class A_MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_a_main, menu);
 		return true;
 	}
-
+	/**所有按钮的监听器 **/
 	private OnClickListener listener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
@@ -230,7 +259,7 @@ public class A_MainActivity extends Activity {
 			}
 		}
 	};
-	
+	/** 信息栏的适配器，用于信息ListView容器的信息变更 **/
 	private class MySimpleAdapter extends SimpleAdapter {
 
 		public MySimpleAdapter(Context context,

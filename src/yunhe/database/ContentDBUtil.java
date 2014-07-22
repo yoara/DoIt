@@ -12,11 +12,15 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+/** 
+ * 日期信息记录数据库操作类
+ **/
 public class ContentDBUtil {
 	
 	/***
-	 * 刪除数据By ID
-	 * @return
+	 * 刪除数据
+	 * @param id 信息的ID
+	 * @param context 调用该操作的context
 	 */
 	public void deleteContentById(String id,Context context) {
 		DBHelper sqler = new DBHelper
@@ -28,7 +32,8 @@ public class ContentDBUtil {
 	}
 	/***
 	 * 保存数据到数据库
-	 * @return
+	 * @param model 信息的对象
+	 * @param context 调用该操作的context
 	 */
 	public void saveToContentDb(ContentModel model,Context context) {
 		ContentValues cv = packageContentValues(model);
@@ -41,7 +46,8 @@ public class ContentDBUtil {
 	}
 	/***
 	 * 更新数据到数据库
-	 * @return
+	 * @param model 信息的对象
+	 * @param context 调用该操作的context
 	 */
 	public void updateContentDb(ContentModel model,Context context) {
 		ContentValues cv = packageContentValues(model);
@@ -68,7 +74,8 @@ public class ContentDBUtil {
 	
 	/***
 	 * 查询记录数据
-	 * @return
+	 * @param date 日期条件
+	 * @param context 调用该操作的context
 	 */
 	public List<Map<String, Object>> queryContentForList(String date, Context context){
 		DBHelper sqler = new DBHelper
@@ -121,7 +128,8 @@ public class ContentDBUtil {
 	
 	/***
 	 * 查询单个详细数据
-	 * @return
+	 * @param id 信息ID
+	 * @param context 调用该操作的context
 	 */
 	public ContentModel queryContentForDetail(String id, Context context){
 		DBHelper sqler = new DBHelper
