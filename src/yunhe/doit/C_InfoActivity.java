@@ -118,12 +118,7 @@ public class C_InfoActivity extends Activity {
 		sbDate.append(day);
 		textDate.setText(sbDate.toString());
 	}
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_a_main, menu);
-		return true;
-	}
-	
+
 	private OnClickListener listener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {

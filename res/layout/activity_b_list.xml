@@ -2,40 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="0.65"
-        android:background="#2C85D7"
-        android:orientation="horizontal" >
-        
-	    <GridView
-	        android:id="@+id/main_week_gv"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_gravity="center"
-	        android:gravity="center" >
-
-	    </GridView>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_weight="0.80"
-        android:layout_height="0dp"
-        android:background="#2C85D7"
-        android:orientation="horizontal" >
-        
-	    <GridView
-	        android:id="@+id/main_day_gv"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_gravity="center"
-	        android:gravity="center" >
-	    </GridView>
-    </LinearLayout>
+    android:orientation="vertical"
+    android:background="@drawable/ic_launcher">
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -43,23 +11,26 @@
         android:orientation="horizontal" 
         android:layout_weight="6">
         <yunhe.view.SwipeDismissListView
-	        android:id="@+id/main_titles_lv"    
+	        android:id="@+id/b_list_titles_lv"    
 	        android:layout_width="match_parent"    
-	        android:layout_height="match_parent"   
+	        android:layout_height="match_parent"
 	        android:listSelector="@android:color/transparent"  
 	        android:cacheColorHint="@android:color/transparent"
 	        android:divider="#666666"
             android:dividerHeight="1px">    
 	    </yunhe.view.SwipeDismissListView> 
     </LinearLayout>
-    
+    <Space
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+			android:layout_weight="0.5"/>
     <LinearLayout 
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:orientation="vertical" 
         android:layout_weight="3">
 	    <yunhe.view.SwipeDismissListView
-	        android:id="@+id/main_titles_done_lv"
+	        android:id="@+id/b_list_titles_done_lv"
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content"
 	        android:divider="#666666"

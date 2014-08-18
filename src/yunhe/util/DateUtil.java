@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Locale;
 
 public class DateUtil {
-	public final static int AROUNDDAY = 2; 
-	private final static SimpleDateFormat sdf = new SimpleDateFormat("ddMMMEEEyyyy",Locale.ENGLISH);
+	public final static int AROUNDDAY = 3; 
+	private final static SimpleDateFormat sdf = new SimpleDateFormat("ddMMMEEEyyyyMM",Locale.ENGLISH);
 	private final static SimpleDateFormat sdf_yyyy_MM_dd = new SimpleDateFormat("yyyy-M-d");
-	public static List<String> returnRoundMonth(int dateRate) {
-		List<String> dateList = new ArrayList<String>();
+	public static List<String[]> returnRoundMonth(int dateRate) {
+		List<String[]> dateList = new ArrayList<String[]>();
 		Date today = getAfterDateByDays(getZeroOfTheDay(new Date()),dateRate);
 		for(int i=AROUNDDAY;i>0;i--){
 			dateList.add(makeDateFormat(sdf.format(getBeforeDateByDays(today,i))));
@@ -27,23 +27,33 @@ public class DateUtil {
 	public static String returnDateTo_yyyy_MM_dd(Date date){
 		return sdf_yyyy_MM_dd.format(date);
 	}
-	public static String returnDDMMMEEETo_yyyy_MM_dd(String date){
-		String _date = date.replaceAll("\n", "");
+	public static String returnDDMMMEEETo_yyyy_MM_dd(String[] date){
+		String _date = date[2].replaceAll("\n", "");
 		Date d = null;
 		try {
-			d = sdf.parse(_date.substring(3,5)+_date.substring(5,8)+_date.substring(0,3)+sdf_yyyy_MM_dd.format(new Date()).substring(0,4));
+			d = sdf.parse(_date.substring(3,5)+_date.substring(5,8)+_date.substring(0,3)
+					+date[3]+date[4]);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		
 		return sdf_yyyy_MM_dd.format(d);
 	}
-	private static String makeDateFormat(String date){
+	public static boolean checkTodayByYyyy_MM_dd(String date){
+		return sdf_yyyy_MM_dd.format(new Date()).equals(date);
+	}
+	private static String[] makeDateFormat(String date){
+		String[] dateFormat = new String[5];
+		dateFormat[0] = date.substring(0, 2);
+		dateFormat[1] = date.substring(5, 8);
+		
 		StringBuffer sb = new StringBuffer();
-		sb.append(date.substring(5, 8)).append("\n");
-		sb.append(date.substring(0, 2)).append("\n");
+		sb.append(dateFormat[1]).append("\n");
+		sb.append(dateFormat[0]).append("\n");
 		sb.append(date.substring(2, 5));
-		return sb.toString().toUpperCase();
+		dateFormat[2] = sb.toString().toUpperCase();
+		dateFormat[3] = date.substring(8, 12);
+		dateFormat[4] = date.substring(12, 14);
+		return dateFormat;
 	}
 	/**输出某天的0:00点钟的Date */
 	private static Date getZeroOfTheDay(Date date) {

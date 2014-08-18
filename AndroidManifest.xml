@@ -1,10 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="yunhe.doit"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="2"
+    android:versionName="2.0" >
 
     <uses-sdk
-        android:minSdkVersion="10"
+        android:minSdkVersion="16"
         android:targetSdkVersion="18" />
 
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -15,25 +15,21 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name=".A_MainActivity"
-            android:label="@string/title_activity_a_main" >
+            android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
+            android:uiOptions="splitActionBarWhenNarrow"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         
-        <!-- 注册自定义静态广播接收器 -->  
-        <receiver android:name="yunhe.doit.receiver.LinkOkReceiver">  
-            <intent-filter>  
-                <action android:name="yunhe.doit.urlLink" />  
-            </intent-filter>  
-        </receiver>  
-        
+        <activity android:name="A_EditContentActivity"></activity>
+        <activity android:name="B_ListContentActivity"
+            android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
+            android:uiOptions="splitActionBarWhenNarrow"></activity>
         <activity android:name="B_EditContentActivity"></activity>
         <activity android:name="C_InfoActivity"></activity>
-        <activity android:name="B_ListContentActivity"></activity>
-        <activity android:name="D_TestFunctionActivity"></activity>
-        <activity android:name="yunhe.doit.testFunction.D_1_SFATestActivity"></activity>
     </application>
 
 </manifest>

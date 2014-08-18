@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import yunhe.model.ActivityShowContentModel;
 import yunhe.model.ContentModel;
 import yunhe.util.Constants;
@@ -36,6 +37,7 @@ public class ContentDBUtil {
 	 * @param context 调用该操作的context
 	 */
 	public void saveToContentDb(ContentModel model,Context context) {
+		model.setIsDone("0");
 		ContentValues cv = packageContentValues(model);
 		DBHelper sqler = new DBHelper
 				(context,Constants.DATANAME,null,Constants.DB_VERSION);
@@ -68,6 +70,9 @@ public class ContentDBUtil {
 		cv.put(ContentModel.FIELD_CONTENT, model.getContent());
 		cv.put(ContentModel.FIELD_DATE, model.getDate());
 		cv.put(ContentModel.FIELD_TIME, model.getTime());
+		if(model.getIsDone()!=null){
+			cv.put(ContentModel.FIELD_ISDONE, model.getIsDone());
+		}
 		/**存储字段END**/
 		return cv;
 	}
@@ -77,15 +82,15 @@ public class ContentDBUtil {
 	 * @param date 日期条件
 	 * @param context 调用该操作的context
 	 */
-	public List<Map<String, Object>> queryContentForList(String date, Context context){
+	public List<Map<String, Object>> queryContentForList(String date,String isDone, Context context){
 		DBHelper sqler = new DBHelper
 				(context,Constants.DATANAME,null,Constants.DB_VERSION);
 		SQLiteDatabase db = sqler.getReadableDatabase();
 		
 		Cursor cursor = db.query(ContentModel.TABLENAME,
-				new String[]{ContentModel.FIELD_ID,ContentModel.FIELD_TITLE}, 		//返回的列
+				new String[]{ContentModel.FIELD_ID,ContentModel.FIELD_TITLE,ContentModel.FIELD_TIME}, 		//返回的列
 				getPackageSqlWhereStr(date), 			//where 字句：name=?
-				getPackageSqlWhereParams(date), 		//字句参数
+				getPackageSqlWhereParams(date,isDone), 		//字句参数
 				null, 									//groupBy
 				null, 									//have
 				null									//orderBy
@@ -96,18 +101,24 @@ public class ContentDBUtil {
 		sqler.close();
 		return listItem;
 	}
-	private String[] getPackageSqlWhereParams(String date) {
-		if(date!=null&&date!=""){
-			return new String[]{date};
+	private String[] getPackageSqlWhereParams(String date,String isDone) {
+		if(date!=null){
+			return new String[]{date,isDone};
+		}else{
+			return new String[]{isDone};
 		}
-		return null;
 	}
 	private String getPackageSqlWhereStr(String date) {
 		StringBuffer strSb = new StringBuffer(" 1=1 ");
-		if(date!=null&&date!=""){
+		if(date!=null){
 			strSb.append(" and ");
-			strSb.append(ContentModel.FIELD_DATE).append("=? ");
+			strSb.append(ContentModel.FIELD_DATE).append(" =? ");
+		}else{
+			strSb.append(" and ");
+			strSb.append(ContentModel.FIELD_DATE).append(" is null ");
 		}
+		strSb.append(" and ");
+		strSb.append(ContentModel.FIELD_ISDONE).append(" =? ");
 		return strSb.toString();
 	}
 	/**封装显示的数据List**/
@@ -118,9 +129,11 @@ public class ContentDBUtil {
 		while(cursor.moveToNext()){
 			int id = cursor.getInt(cursor.getColumnIndex(ContentModel.FIELD_ID));
             String title = cursor.getString(cursor.getColumnIndex(ContentModel.FIELD_TITLE));  
+            String time = cursor.getString(cursor.getColumnIndex(ContentModel.FIELD_TIME));  
             Map<String, Object> map = new HashMap<String, Object>();
             map.put(ActivityShowContentModel.ITEM_ID, id);
             map.put(ActivityShowContentModel.ITEM_TITLE, title);
+            map.put(ActivityShowContentModel.ITEM_TIME, time);
             listItem.add(map);
         }
 		return listItem;
@@ -171,5 +184,25 @@ public class ContentDBUtil {
 		}else{
 			return null;
 		}
+	}
+	/***
+	 * 刪除数据
+	 * @param id 信息的ID
+	 * @param context 调用该操作的context
+	 * @param isUp 由完整状态上升到列表状态
+	 */
+	public void changeContentStatusById(String id,
+			Context context, boolean isUp) {
+		DBHelper sqler = new DBHelper
+				(context,Constants.DATANAME,null,Constants.DB_VERSION);
+		SQLiteDatabase db = sqler.getWritableDatabase();
+		String sql = new StringBuilder(" update ")
+					.append(ContentModel.TABLENAME).append(" set ")
+					.append(ContentModel.FIELD_ISDONE).append("=")
+					.append(isUp?"'0'":"'1'").append("  where ")
+					.append(ContentModel.FIELD_ID).append("=").append(id).toString();
+		db.execSQL(sql);
+		db.close();
+		sqler.close();
 	}
 }

@@ -1,118 +1,146 @@
 package yunhe.doit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import yunhe.database.ContentDBUtil;
 import yunhe.model.ActivityShowContentModel;
 import yunhe.model.ContentModel;
 import yunhe.util.Constants;
-import android.os.Bundle;
-import android.app.Activity;
-import android.content.Context;
+import yunhe.util.ListTitleGradientColorEnum;
+import yunhe.view.SwipeDismissListView;
+import yunhe.view.SwipeDismissListView.OnDismissCallback;
 import android.content.Intent;
-import android.view.Menu;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Bundle;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.Toast;
 
-public class B_ListContentActivity extends Activity {
-	private Button mbtback;
-	private ListView listTitle;
+public class B_ListContentActivity extends _BaseSlidingActivity {
+	private SwipeDismissListView listTitle;
 	List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>();
+	private SwipeDismissListView listTitle_done;
+	List<Map<String, Object>> listItem_done = new ArrayList<Map<String, Object>>();
+	
+	private SimpleAdapter listItemAdapter;
+	private SimpleAdapter listItemDoneAdapter;
+	@Override
+	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
+		getSupportMenuInflater().inflate(R.menu.b_button_menu, menu);
+		return true;
+	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_c_listcontent);
-
-		mbtback = (Button) findViewById(R.id.listcontent_go_back);
-		mbtback.setOnClickListener(listener);
-
+		
 		//查询结果
 		ContentDBUtil dbUtil = new ContentDBUtil();
-		listItem = dbUtil.queryContentForList(null, this);
+		listItem = dbUtil.queryContentForList(null,ContentModel.ISDONE_NOT, this);
 		// 生成适配器的Item和动态数组对应的元素
-		MySimpleAdapter listItemAdapter = new MySimpleAdapter(this, listItem,// 数据源
-			R.layout.a_main_listitem_title,// ListItem的XML实现
+		listItemAdapter = new SimpleAdapter(this, listItem,// 数据源
+			R.layout.activity_b_listitem_title,// ListItem的XML实现
 			// 动态数组与ImageItem对应的子项
-			new String[] {ActivityShowContentModel.ITEM_TITLE,
-				 ActivityShowContentModel.ITEM_ID,
-				 ActivityShowContentModel.ITEM_ID},
+			new String[] {ActivityShowContentModel.ITEM_TITLE},
 			// ImageItem的XML文件里面的一个ImageView,两个TextView ID
-			new int[] { R.id.tv_contentlist_title,
-				R.id.bt_contentlist_goedit,
-				R.id.bt_contentlist_goDelete });
-		// 添加并且显示
-		listTitle = (ListView) findViewById(R.id.listcontent_titles_lv);
-		listTitle.setAdapter(listItemAdapter);
-	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.activity_a_main, menu);
-		return true;
-	}
-
-	private OnClickListener listener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			switch (v.getId()) {
-			case R.id.listcontent_go_back:
-				finish();
-				break;
-			default:
-				break;
+			new int[] { R.id.tv_contentlist_title}){
+			public View getView(int position, View convertView,
+					ViewGroup parent) {
+				convertView = super.getView(position, convertView, parent);
+				//006FFF~00FFFF 渐变颜色
+				//0FFFFF
+				int colors[] = ListTitleGradientColorEnum.values()[position%11].getGradientColors();
+				GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+				convertView.findViewById(R.id.tv_content_split).setBackground(gd);
+				return convertView;
 			}
-		}
-	};
-	
-	private class MySimpleAdapter extends SimpleAdapter {
-
-		public MySimpleAdapter(Context context,
-				List<? extends Map<String, ?>> data, int resource,
-				String[] from, int[] to) {
-			super(context, data, resource, from, to);
-		}
-
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent) {
-			final int mPosition = position;
-			convertView = super.getView(position, convertView, parent);
-			Button buttonEdit = (Button) convertView
-					.findViewById(R.id.bt_contentlist_goedit);// id为你自定义布局中按钮的id
-			buttonEdit.setTag(buttonEdit.getText());
-			buttonEdit.setText("编辑");
-			final String id = buttonEdit.getTag().toString();
-			
-			buttonEdit.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent intent_edit = new Intent(B_ListContentActivity.this, B_EditContentActivity.class);
-					ContentDBUtil dbUtil = new ContentDBUtil();
-					ContentModel model = dbUtil.queryContentForDetail(id, B_ListContentActivity.this);
-					intent_edit.putExtra(Constants.DETAIL_MODEL, model);
-					startActivity(intent_edit);
-				}
-			});
-			Button buttonDelete = (Button) convertView
-					.findViewById(R.id.bt_contentlist_goDelete);
-			buttonDelete.setText("删除");
-			buttonDelete.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					ContentDBUtil dbUtil = new ContentDBUtil();
-					dbUtil.deleteContentById(id
+		};
+		
+		
+		// 添加并且显示
+		listTitle = (SwipeDismissListView) findViewById(R.id.b_list_titles_lv);
+		listTitle.setAdapter(listItemAdapter);
+		listTitle.setOnDismissCallback(new OnDismissCallback(){
+            @Override  
+            public void onDismiss(int dismissPosition, boolean isLeft) {
+            	HashMap<String,Object> map = (HashMap<String,Object>)
+        				listTitle.getItemAtPosition(dismissPosition);
+            	ContentDBUtil dbUtil = new ContentDBUtil();
+            	if(isLeft){
+            		dbUtil.deleteContentById(map.get(ActivityShowContentModel.ITEM_ID).toString()
 							, B_ListContentActivity.this);
-					listItem.remove(mPosition);
-					notifyDataSetChanged();
-					Toast.makeText(B_ListContentActivity.this, "刪除成功", Toast.LENGTH_SHORT).show();
-				}
-			});
-			return convertView;
-		}
+            		listItem.remove(dismissPosition);
+					listItemAdapter.notifyDataSetChanged();
+            	}else{
+            		//下降操作
+					dbUtil.changeContentStatusById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+							, B_ListContentActivity.this,false);
+					listItem_done.add(listItem.remove(dismissPosition));
+					listItemAdapter.notifyDataSetChanged();
+					listItemDoneAdapter.notifyDataSetChanged();
+            	}
+            }
+
+			@Override
+			public void onEdit(int dismissPosition) {
+				goIntentEdit(dismissPosition);
+			}
+        });
+		
+		
+		listItem_done = dbUtil.queryContentForList(null,ContentModel.ISDONE, this);
+		// 生成适配器的Item和动态数组对应的元素
+		listItemDoneAdapter = new SimpleAdapter(this, listItem_done,// 数据源
+			R.layout.activity_b_listitem_title_done,// ListItem的XML实现
+			// 动态数组与ImageItem对应的子项
+			new String[] {ActivityShowContentModel.ITEM_TITLE},
+			// ImageItem的XML文件里面的一个ImageView,两个TextView ID
+			new int[] { R.id.tv_contentlist_title_done});
+		// 添加并且显示
+		listTitle_done = (SwipeDismissListView) findViewById(R.id.b_list_titles_done_lv);
+		listTitle_done.setAdapter(listItemDoneAdapter);
+		listTitle_done.setOnDismissCallback(new OnDismissCallback() {
+            @Override  
+            public void onDismiss(int dismissPosition, boolean isLeft) {
+            	HashMap<String,Object> map = (HashMap<String,Object>)
+        				listTitle_done.getItemAtPosition(dismissPosition);
+            	ContentDBUtil dbUtil = new ContentDBUtil();
+            	if(isLeft){
+            		dbUtil.deleteContentById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+							, B_ListContentActivity.this);
+            		listItem_done.remove(dismissPosition);
+					listItemDoneAdapter.notifyDataSetChanged();
+            	}else{
+            		//上升操作
+					dbUtil.changeContentStatusById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+							, B_ListContentActivity.this,true);
+					listItem.add(listItem_done.remove(dismissPosition));
+					listItemAdapter.notifyDataSetChanged();
+					listItemDoneAdapter.notifyDataSetChanged();
+            	}
+            }
+
+			@Override
+			public void onEdit(int dismissPosition) {}
+        });
+	}
+	
+	private void goIntentEdit(int dismissPosition){
+		Intent intent_edit = new Intent(B_ListContentActivity.this, B_EditContentActivity.class);
+		ContentDBUtil dbUtil = new ContentDBUtil();
+		HashMap<String,Object> map = (HashMap<String,Object>)
+				listTitle.getItemAtPosition(dismissPosition);
+		ContentModel model = dbUtil.queryContentForDetail(
+				map.get(ActivityShowContentModel.ITEM_ID).toString(), B_ListContentActivity.this);
+		intent_edit.putExtra(Constants.DETAIL_MODEL, model);
+		startActivity(intent_edit);
+	}
+	
+	@Override
+	protected void setOwnView() {
+		setBehindContentView(R.layout.activity_menu_frame);
+		setContentView(R.layout.activity_b_list);
 	}
 }

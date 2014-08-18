@@ -34,7 +34,8 @@ public class DBHelper extends SQLiteOpenHelper{
 				"'" +ContentModel.FIELD_TITLE+"' VARCHAR ," +
 				"'" +ContentModel.FIELD_CONTENT+"' VARCHAR ," +
 				"'" +ContentModel.FIELD_DATE+"' VARCHAR ," +
-				"'" +ContentModel.FIELD_TIME+"' VARCHAR " +
+				"'" +ContentModel.FIELD_TIME+"' VARCHAR ," +
+				"'" +ContentModel.FIELD_ISDONE+"' VARCHAR " +
 				");";
 		db.execSQL(sql_content);
 		

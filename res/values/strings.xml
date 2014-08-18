@@ -2,17 +2,16 @@
 
     <string name="app_name">DoIt</string>
     <string name="menu_settings">Settings</string>
-    <string name="title_activity_a_main">DoIt</string>
 
-    
     <!-- main activity -->
-    <string name="bt_main_go_menu">菜单</string>
-    <string name="bt_main_go_add">新增</string>
-    <string name="bt_main_go_edit">更改</string>
-    <string name="bt_main_go_cancel">删除</string>
-    <string name="bt_main_go_list">显示全部</string>
-    <string name="bt_main_go_info">信息</string>
-    <string name="bt_main_go_function">附加测试</string>
+    <string name="menu_go_info">信息</string>
+    <string name="menu_go_add">添加</string>
+    <string name="menu_go_main">日\n程</string>
+    <string name="menu_go_list">清\n单 </string>
+    <string name="main_title">幹它</string>
+    
+    <string name="actionbar_go_menu">menu</string>
+    <string name="actionbar_go_setting">setting</string>
     
     <!-- editcontent activity -->
     <string name="ev_editcontent_hint_title">标题</string>

@@ -3,7 +3,8 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-    
+    
+
     <DatePicker
         android:id="@+id/dp_c_date_datePicker"
         android:layout_width="fill_parent"
@@ -14,5 +15,4 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/bt_editcontent_selectDate" />
-
 </LinearLayout>

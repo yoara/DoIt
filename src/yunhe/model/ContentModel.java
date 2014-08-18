@@ -6,6 +6,8 @@ import android.os.Parcelable;
 /** 信息记录表 **/
 public class ContentModel implements Parcelable {
 	public static final String TABLENAME = "Content";
+	public static final String ISDONE = "1";
+	public static final String ISDONE_NOT = "0";
 
 	/**
 	 * 数据库字段定义 id、标题、内容
@@ -15,6 +17,7 @@ public class ContentModel implements Parcelable {
 	public static final String FIELD_CONTENT = "content";
 	public static final String FIELD_DATE = "date";
 	public static final String FIELD_TIME = "time";
+	public static final String FIELD_ISDONE = "isDone";
 	/** 数据库字段定义END **/
 
 	private int id;
@@ -22,6 +25,15 @@ public class ContentModel implements Parcelable {
 	private String content;
 	private String date;
 	private String time;
+	private String isDone;
+
+	public String getIsDone() {
+		return isDone;
+	}
+
+	public void setIsDone(String isDone) {
+		this.isDone = isDone;
+	}
 
 	public String getDate() {
 		return date;
@@ -64,12 +76,13 @@ public class ContentModel implements Parcelable {
 	}
 
 	public ContentModel(int id, String title, String content, String date,
-			String time) {
+			String time,String isDone) {
 		this.id = id;
 		this.title = title;
 		this.content = content;
 		this.date = date;
 		this.time = time;
+		this.isDone = isDone;
 	}
 
 	@Override
@@ -84,6 +97,7 @@ public class ContentModel implements Parcelable {
 		dest.writeString(this.content);
 		dest.writeString(this.date);
 		dest.writeString(this.time);
+		dest.writeString(this.isDone);
 	}
 
 	public ContentModel() {
@@ -95,7 +109,7 @@ public class ContentModel implements Parcelable {
 			// 从Parcel中读取数据，返回ContentModel对象
 			return new ContentModel(source.readInt(), source.readString(),
 					source.readString(), source.readString(),
-					source.readString());
+					source.readString(),source.readString());
 		}
 
 		@Override

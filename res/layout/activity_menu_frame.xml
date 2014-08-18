@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/menu_frame"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#2C85D7"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/menu_iv_info"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#2C85D7"
+        android:contentDescription="@string/menu_go_info"
+        android:src="@android:drawable/btn_star_big_on" />
+
+    <TextView
+        android:id="@+id/menu_tv_main"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#7FB4E8"
+        android:gravity="center"
+        android:textSize="45sp"
+        android:textColor="#2C85D7"
+        android:text="@string/menu_go_main" />
+
+    <TextView
+        android:id="@+id/menu_tv_list"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#E4EEFA"
+        android:gravity="center"
+        android:textSize="45sp"
+        android:textColor="#2C85D7"
+        android:text="@string/menu_go_list" />
+
+</LinearLayout>
