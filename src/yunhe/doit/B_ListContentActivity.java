@@ -13,39 +13,57 @@ import yunhe.util.ListTitleGradientColorEnum;
 import yunhe.view.SwipeDismissListView;
 import yunhe.view.SwipeDismissListView.OnDismissCallback;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 public class B_ListContentActivity extends _BaseSlidingActivity {
-	private SwipeDismissListView listTitle;
+	/** 信息栏的数据集合 **/
 	List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>();
-	private SwipeDismissListView listTitle_done;
-	List<Map<String, Object>> listItem_done = new ArrayList<Map<String, Object>>();
-	
+	List<Map<String, Object>> listItemDone = new ArrayList<Map<String, Object>>();
+	List<Map<String, Object>> listItemAll = new ArrayList<Map<String, Object>>();
+	private SwipeDismissListView listTitle;
 	private SimpleAdapter listItemAdapter;
-	private SimpleAdapter listItemDoneAdapter;
+	
+	
 	@Override
 	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.b_button_menu, menu);
 		return true;
 	}
 	@Override
+	protected void onResume() {
+		super.onResume();
+		initView();
+	}
+	
+	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+		initView();
+	}
+	private void initView() {
 		//查询结果
 		ContentDBUtil dbUtil = new ContentDBUtil();
 		listItem = dbUtil.queryContentForList(null,ContentModel.ISDONE_NOT, this);
+		listItemDone = dbUtil.queryContentForList(null,ContentModel.ISDONE, this);
+		listItemAll.clear();
+		listItemAll.addAll(listItem);
+		listItemAll.addAll(listItemDone);
+		
 		// 生成适配器的Item和动态数组对应的元素
-		listItemAdapter = new SimpleAdapter(this, listItem,// 数据源
+		listItemAdapter = new SimpleAdapter(this, listItemAll,// 数据源
 			R.layout.activity_b_listitem_title,// ListItem的XML实现
 			// 动态数组与ImageItem对应的子项
-			new String[] {ActivityShowContentModel.ITEM_TITLE},
+			new String[] {ActivityShowContentModel.ITEM_TITLE,
+				ActivityShowContentModel.ITEM_ISDONE},
 			// ImageItem的XML文件里面的一个ImageView,两个TextView ID
-			new int[] { R.id.tv_contentlist_title}){
+			new int[] { R.id.tv_b_contentlist_title,
+				R.id.tv_b_contentlist_isdone}){
 			public View getView(int position, View convertView,
 					ViewGroup parent) {
 				convertView = super.getView(position, convertView, parent);
@@ -53,77 +71,71 @@ public class B_ListContentActivity extends _BaseSlidingActivity {
 				//0FFFFF
 				int colors[] = ListTitleGradientColorEnum.values()[position%11].getGradientColors();
 				GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
-				convertView.findViewById(R.id.tv_content_split).setBackground(gd);
+				convertView.findViewById(R.id.tv_b_content_split).setBackground(gd);
+				TextView tvDone = (TextView)convertView.findViewById(R.id.tv_b_contentlist_isdone);
+				if(tvDone.getText().equals(ContentModel.ISDONE)){
+					convertView.setBackgroundColor(Color.parseColor("#CCCCCC"));
+				}else{
+					if(position==0){
+						convertView.setBackground(getResources().getDrawable(R.drawable.listtextcolorshape));
+					}else{
+						convertView.setBackgroundColor(Color.WHITE);
+					}
+				}
 				return convertView;
 			}
 		};
-		
 		
 		// 添加并且显示
 		listTitle = (SwipeDismissListView) findViewById(R.id.b_list_titles_lv);
 		listTitle.setAdapter(listItemAdapter);
 		listTitle.setOnDismissCallback(new OnDismissCallback(){
             @Override  
-            public void onDismiss(int dismissPosition, boolean isLeft) {
+            public void onDismiss(View dismissView,int dismissPosition, boolean isLeft) {
             	HashMap<String,Object> map = (HashMap<String,Object>)
         				listTitle.getItemAtPosition(dismissPosition);
             	ContentDBUtil dbUtil = new ContentDBUtil();
-            	if(isLeft){
-            		dbUtil.deleteContentById(map.get(ActivityShowContentModel.ITEM_ID).toString()
-							, B_ListContentActivity.this);
-            		listItem.remove(dismissPosition);
-					listItemAdapter.notifyDataSetChanged();
-            	}else{
-            		//下降操作
-					dbUtil.changeContentStatusById(map.get(ActivityShowContentModel.ITEM_ID).toString()
-							, B_ListContentActivity.this,false);
-					listItem_done.add(listItem.remove(dismissPosition));
-					listItemAdapter.notifyDataSetChanged();
-					listItemDoneAdapter.notifyDataSetChanged();
+            	if(ContentModel.ISDONE.equals(	//已完成部分操作
+            			map.get(ActivityShowContentModel.ITEM_ISDONE))){
+                	if(isLeft){	//删除已完成项
+                		dbUtil.deleteContentById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+    							, B_ListContentActivity.this);
+                		listItemDone.remove(dismissPosition-listItem.size());
+                		resetList();
+                	}else{		//置为未完成
+    					dbUtil.changeContentStatusById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+    							, B_ListContentActivity.this,true);
+    					map.put(ActivityShowContentModel.ITEM_ISDONE, ContentModel.ISDONE_NOT);
+    					listItem.add(listItemDone.remove(dismissPosition-listItem.size()));
+    					resetList();
+                	}
+            	}else{	//未完成部分操作
+	            	if(isLeft){	//删除
+	            		dbUtil.deleteContentById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+    							, B_ListContentActivity.this);
+	            		listItem.remove(dismissPosition);
+                		resetList();
+	            	}else{		//置为已完成
+						dbUtil.changeContentStatusById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+								, B_ListContentActivity.this,false);
+    					map.put(ActivityShowContentModel.ITEM_ISDONE, ContentModel.ISDONE);
+						listItemDone.add(listItem.remove(dismissPosition));
+						resetList();
+	            	}
             	}
             }
 
+			private void resetList() {
+				listItemAll.clear();
+				listItemAll.addAll(listItem);
+				listItemAll.addAll(listItemDone);
+				listItemAdapter.notifyDataSetChanged();
+			}
+            
 			@Override
 			public void onEdit(int dismissPosition) {
 				goIntentEdit(dismissPosition);
 			}
-        });
-		
-		
-		listItem_done = dbUtil.queryContentForList(null,ContentModel.ISDONE, this);
-		// 生成适配器的Item和动态数组对应的元素
-		listItemDoneAdapter = new SimpleAdapter(this, listItem_done,// 数据源
-			R.layout.activity_b_listitem_title_done,// ListItem的XML实现
-			// 动态数组与ImageItem对应的子项
-			new String[] {ActivityShowContentModel.ITEM_TITLE},
-			// ImageItem的XML文件里面的一个ImageView,两个TextView ID
-			new int[] { R.id.tv_contentlist_title_done});
-		// 添加并且显示
-		listTitle_done = (SwipeDismissListView) findViewById(R.id.b_list_titles_done_lv);
-		listTitle_done.setAdapter(listItemDoneAdapter);
-		listTitle_done.setOnDismissCallback(new OnDismissCallback() {
-            @Override  
-            public void onDismiss(int dismissPosition, boolean isLeft) {
-            	HashMap<String,Object> map = (HashMap<String,Object>)
-        				listTitle_done.getItemAtPosition(dismissPosition);
-            	ContentDBUtil dbUtil = new ContentDBUtil();
-            	if(isLeft){
-            		dbUtil.deleteContentById(map.get(ActivityShowContentModel.ITEM_ID).toString()
-							, B_ListContentActivity.this);
-            		listItem_done.remove(dismissPosition);
-					listItemDoneAdapter.notifyDataSetChanged();
-            	}else{
-            		//上升操作
-					dbUtil.changeContentStatusById(map.get(ActivityShowContentModel.ITEM_ID).toString()
-							, B_ListContentActivity.this,true);
-					listItem.add(listItem_done.remove(dismissPosition));
-					listItemAdapter.notifyDataSetChanged();
-					listItemDoneAdapter.notifyDataSetChanged();
-            	}
-            }
-
-			@Override
-			public void onEdit(int dismissPosition) {}
         });
 	}
 	
@@ -132,9 +144,11 @@ public class B_ListContentActivity extends _BaseSlidingActivity {
 		ContentDBUtil dbUtil = new ContentDBUtil();
 		HashMap<String,Object> map = (HashMap<String,Object>)
 				listTitle.getItemAtPosition(dismissPosition);
-		ContentModel model = dbUtil.queryContentForDetail(
-				map.get(ActivityShowContentModel.ITEM_ID).toString(), B_ListContentActivity.this);
-		intent_edit.putExtra(Constants.DETAIL_MODEL, model);
+		if(ContentModel.ISDONE_NOT.equals(map.get(ActivityShowContentModel.ITEM_ISDONE))){
+			ContentModel model = dbUtil.queryContentForDetail(
+					map.get(ActivityShowContentModel.ITEM_ID).toString(), B_ListContentActivity.this);
+			intent_edit.putExtra(Constants.DETAIL_MODEL, model);
+		}
 		startActivity(intent_edit);
 	}
 	
@@ -142,5 +156,10 @@ public class B_ListContentActivity extends _BaseSlidingActivity {
 	protected void setOwnView() {
 		setBehindContentView(R.layout.activity_menu_frame);
 		setContentView(R.layout.activity_b_list);
+	}
+	@Override
+	protected void goSettingButton() {
+		Intent intent_b_add = new Intent(this,B_EditContentActivity.class);
+		startActivity(intent_b_add);
 	}
 }

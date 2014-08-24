@@ -5,8 +5,6 @@ import yunhe.model.ContentModel;
 import yunhe.util.Constants;
 import android.os.Bundle;
 import android.app.Activity;
-import android.content.Intent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -45,11 +43,14 @@ public class B_EditContentActivity extends Activity {
 		public void onClick(View v) {
 			switch (v.getId()) {
 			case R.id.b_bt_saveContent:
+				String title = textTitle.getText().toString();
+				if(title.trim().length()==0){
+					Toast.makeText(B_EditContentActivity.this, "请至少输入标题", Toast.LENGTH_SHORT).show();
+					return;
+				}
 				saveContentIntoDb();
 				Toast.makeText(B_EditContentActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-				Intent intent_main = new Intent(B_EditContentActivity.this,
-						B_ListContentActivity.class);
-				startActivity(intent_main);
+				finish();
 				break;
 			default:
 				break;

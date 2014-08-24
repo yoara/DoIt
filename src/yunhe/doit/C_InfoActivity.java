@@ -7,8 +7,6 @@ import yunhe.util.Constants;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -126,9 +124,7 @@ public class C_InfoActivity extends Activity {
 			case R.id.bt_c_info_save:
 				saveInfoToDb();
 				Toast.makeText(C_InfoActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-				Intent intent_main = new Intent(C_InfoActivity.this,
-						A_MainActivity.class);
-				startActivity(intent_main);
+				finish();
 				break;
 			case R.id.et_c_info_editDate:
 				builder.show();

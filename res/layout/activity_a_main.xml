@@ -41,7 +41,7 @@
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:orientation="horizontal" 
-        android:layout_weight="6">
+        android:layout_weight="9.5">
         <yunhe.view.SwipeDismissListView
 	        android:id="@+id/main_titles_lv"    
 	        android:layout_width="match_parent"    
@@ -51,19 +51,5 @@
 	        android:divider="#666666"
             android:dividerHeight="1px">    
 	    </yunhe.view.SwipeDismissListView> 
-    </LinearLayout>
-    
-    <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical" 
-        android:layout_weight="3">
-	    <yunhe.view.SwipeDismissListView
-	        android:id="@+id/main_titles_done_lv"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:divider="#666666"
-            android:dividerHeight="1px">
-	    </yunhe.view.SwipeDismissListView>
     </LinearLayout>
 </LinearLayout>

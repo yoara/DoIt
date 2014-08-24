@@ -8,9 +8,10 @@ import yunhe.util.Constants;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -42,8 +43,8 @@ public class A_EditContentActivity extends Activity {
 		
 		textDate = (EditText) findViewById(R.id.et_editDate);
 		textTime = (EditText) findViewById(R.id.et_editTime);
-		textDate.setOnClickListener(listener);
-		textTime.setOnClickListener(listener);
+		textDate.setOnTouchListener(touchLis);
+		textTime.setOnTouchListener(touchLis);
 		
 		textTitle = (EditText) findViewById(R.id.et_editTitle);
 		textContent = (EditText) findViewById(R.id.et_editCont);
@@ -110,22 +111,37 @@ public class A_EditContentActivity extends Activity {
 		textTime.setText(sbTime.toString());
 	}
 	
-	private OnClickListener listener = new OnClickListener() {
+	
+	
+	private OnTouchListener touchLis = new OnTouchListener() {
 		@Override
-		public void onClick(View v) {
+		public boolean onTouch(View v, MotionEvent event) {
 			switch (v.getId()) {
-			case R.id.bt_saveContent:
-				saveContentIntoDb();
-				Toast.makeText(A_EditContentActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
-				Intent intent_main = new Intent(A_EditContentActivity.this,
-						A_MainActivity.class);
-				startActivity(intent_main);
-				break;
 			case R.id.et_editDate:
 				builder.show();
 				break;
 			case R.id.et_editTime:
 				builder.show();
+				break;
+			default:
+				break;
+			}
+			return false;
+		}
+	};
+	private OnClickListener listener = new OnClickListener() {
+		@Override
+		public void onClick(View v) {
+			switch (v.getId()) {
+			case R.id.bt_saveContent:
+				String title = textTitle.getText().toString();
+				if(title.trim().length()==0){
+					Toast.makeText(A_EditContentActivity.this, "请至少输入标题", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				saveContentIntoDb();
+				Toast.makeText(A_EditContentActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+				finish();
 				break;
 			case R.id.bt_editcontent_saveDate:
 				builder.hide();
@@ -144,6 +160,7 @@ public class A_EditContentActivity extends Activity {
 		if(model.getTime().length()<2){
 			model.setTime("0"+model.getTime());
 		}
+		model.setIsAlarm(ContentModel.ISALARM_NOT);
 		ContentDBUtil dbUtil = new ContentDBUtil();
 		if(contentId!=null){
 			model.setId(contentId);

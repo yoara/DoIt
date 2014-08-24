@@ -39,6 +39,8 @@ public class ContentDBUtil {
 	public void saveToContentDb(ContentModel model,Context context) {
 		model.setIsDone("0");
 		ContentValues cv = packageContentValues(model);
+		cv.put(ContentModel.FIELD_ISDONE, "0");
+		cv.put(ContentModel.FIELD_ISALARM, "0");
 		DBHelper sqler = new DBHelper
 				(context,Constants.DATANAME,null,Constants.DB_VERSION);
 		SQLiteDatabase db = sqler.getWritableDatabase();
@@ -70,8 +72,8 @@ public class ContentDBUtil {
 		cv.put(ContentModel.FIELD_CONTENT, model.getContent());
 		cv.put(ContentModel.FIELD_DATE, model.getDate());
 		cv.put(ContentModel.FIELD_TIME, model.getTime());
-		if(model.getIsDone()!=null){
-			cv.put(ContentModel.FIELD_ISDONE, model.getIsDone());
+		if(model.getIsAlarm()!=null){
+			cv.put(ContentModel.FIELD_ISALARM, model.getIsAlarm());
 		}
 		/**存储字段END**/
 		return cv;
@@ -88,7 +90,9 @@ public class ContentDBUtil {
 		SQLiteDatabase db = sqler.getReadableDatabase();
 		
 		Cursor cursor = db.query(ContentModel.TABLENAME,
-				new String[]{ContentModel.FIELD_ID,ContentModel.FIELD_TITLE,ContentModel.FIELD_TIME}, 		//返回的列
+				new String[]{ContentModel.FIELD_ID,ContentModel.FIELD_TITLE,
+					ContentModel.FIELD_TIME,ContentModel.FIELD_ISDONE,
+					ContentModel.FIELD_ISALARM}, //返回的列
 				getPackageSqlWhereStr(date), 			//where 字句：name=?
 				getPackageSqlWhereParams(date,isDone), 		//字句参数
 				null, 									//groupBy
@@ -130,10 +134,14 @@ public class ContentDBUtil {
 			int id = cursor.getInt(cursor.getColumnIndex(ContentModel.FIELD_ID));
             String title = cursor.getString(cursor.getColumnIndex(ContentModel.FIELD_TITLE));  
             String time = cursor.getString(cursor.getColumnIndex(ContentModel.FIELD_TIME));  
+            String isDone = cursor.getString(cursor.getColumnIndex(ContentModel.FIELD_ISDONE));  
+            String isAlarm = cursor.getString(cursor.getColumnIndex(ContentModel.FIELD_ISALARM));  
             Map<String, Object> map = new HashMap<String, Object>();
             map.put(ActivityShowContentModel.ITEM_ID, id);
             map.put(ActivityShowContentModel.ITEM_TITLE, title);
             map.put(ActivityShowContentModel.ITEM_TIME, time);
+            map.put(ActivityShowContentModel.ITEM_ISDONE, isDone);
+            map.put(ActivityShowContentModel.ITEM_ISALARM, isAlarm);
             listItem.add(map);
         }
 		return listItem;
@@ -200,6 +208,27 @@ public class ContentDBUtil {
 					.append(ContentModel.TABLENAME).append(" set ")
 					.append(ContentModel.FIELD_ISDONE).append("=")
 					.append(isUp?"'0'":"'1'").append("  where ")
+					.append(ContentModel.FIELD_ID).append("=").append(id).toString();
+		db.execSQL(sql);
+		db.close();
+		sqler.close();
+	}
+	
+	/***
+	 * 增加闹钟
+	 * @param id 信息的ID
+	 * @param context 调用该操作的context
+	 * @param isUp 由完整状态上升到列表状态
+	 */
+	public void changeContentAlarmById(String id,
+			Context context, boolean isAlarm) {
+		DBHelper sqler = new DBHelper
+				(context,Constants.DATANAME,null,Constants.DB_VERSION);
+		SQLiteDatabase db = sqler.getWritableDatabase();
+		String sql = new StringBuilder(" update ")
+					.append(ContentModel.TABLENAME).append(" set ")
+					.append(ContentModel.FIELD_ISALARM).append("=")
+					.append(isAlarm?"'1'":"'0'").append("  where ")
 					.append(ContentModel.FIELD_ID).append("=").append(id).toString();
 		db.execSQL(sql);
 		db.close();

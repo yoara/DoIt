@@ -1,22 +1,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="yunhe.doit"
     android:versionCode="2"
-    android:versionName="2.0" >
+    android:versionName="2.0" xmlns:tools="http://schemas.android.com/tools">
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="18" />
+        android:targetSdkVersion="18" tools:ignore="OldTargetApi"/>
 
     <uses-permission android:name="android.permission.INTERNET"/>
     
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/AppTheme" >
+        android:theme="@style/AppTheme" tools:ignore="AllowBackup">
         <activity
             android:name=".A_MainActivity"
             android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
             android:uiOptions="splitActionBarWhenNarrow"
+            android:launchMode="singleTask"
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,12 +25,23 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="A_EditContentActivity"></activity>
+        <!-- 注册自定义静态广播接收器 -->
+        <receiver android:name="yunhe.receiver.AlarmReceiver" tools:ignore="ExportedReceiver">  
+            <intent-filter>  
+                <action android:name="yunhe.doit.alarmLink" />
+            </intent-filter>  
+        </receiver>  
+        
+        <activity android:name="A_EditContentActivity"/>
         <activity android:name="B_ListContentActivity"
             android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
-            android:uiOptions="splitActionBarWhenNarrow"></activity>
-        <activity android:name="B_EditContentActivity"></activity>
-        <activity android:name="C_InfoActivity"></activity>
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:launchMode="singleTask"
+            />
+        <activity android:name="B_EditContentActivity"
+            />
+        <activity android:name="C_InfoActivity"
+            />
     </application>
 
 </manifest>

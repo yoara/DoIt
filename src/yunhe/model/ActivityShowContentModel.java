@@ -7,4 +7,6 @@ public class ActivityShowContentModel {
 	public static final String ITEM_CONTENT = "ItemContent";
 	public static final String ITEM_DATE = "ItemDate";
 	public static final String ITEM_TIME = "ItemTime";
+	public static final String ITEM_ISDONE = "ItemIsDone";
+	public static final String ITEM_ISALARM = "ItemIsAlarm";
 }

@@ -1,20 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="40dp"
-	android:minHeight="?android:attr/listPreferredItemHeight"
-    >
+    android:layout_height="60dp"
+	android:minHeight="?android:attr/listPreferredItemHeight">
  <TextView
-        android:id="@+id/tv_content_split"
+        android:id="@+id/tv_b_content_split"
         android:layout_width="10dp"
-        android:layout_height="40dp"/>
+        android:layout_height="60dp"/>
+
  <TextView
-       android:id="@+id/tv_contentlist_title"
-       android:layout_width="match_parent"
-       android:layout_height="40dp"
-       android:textColor="#2C85D7"
-       android:layout_gravity="center"
-       android:gravity="center_vertical"
-       android:textSize="20sp"
-       />
+     android:id="@+id/tv_b_contentlist_title"
+     android:layout_width="match_parent"
+     android:layout_height="60dp"
+     android:layout_gravity="center"
+     android:layout_toRightOf="@+id/tv_b_content_split"
+     android:gravity="center_vertical"
+     android:textColor="#2C85D7"
+     android:textSize="25sp" />
+    <TextView
+        android:id="@+id/tv_b_contentlist_isdone"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignBaseline="@+id/tv_b_contentlist_title"
+        android:layout_alignBottom="@+id/tv_b_contentlist_title"
+        android:layout_toRightOf="@+id/tv_b_content_split"/>
 </RelativeLayout>

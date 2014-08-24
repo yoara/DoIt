@@ -3,6 +3,9 @@ package yunhe.doit;
 import yunhe.database.UserInfoDBUtil;
 import yunhe.model.UserInfoModel;
 import yunhe.util.Constants;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -40,7 +43,31 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 	
 	@Override
 	public void onBackPressed() {
-		//super.onBackPressed();
+		exitDialog();
+	}
+	
+	private void exitDialog() {
+        AlertDialog.Builder builder = new Builder(this); 
+        builder.setMessage("确定要退出吗?"); 
+        builder.setTitle("提示");
+        builder.setPositiveButton("确认",
+        new android.content.DialogInterface.OnClickListener() { 
+            @Override 
+            public void onClick(DialogInterface dialog, int which) { 
+               dialog.dismiss();
+               finish();
+               android.os.Process.killProcess(android.os.Process.myPid()); 
+               System.exit(0);
+            } 
+        });
+        builder.setNegativeButton("取消", 
+        new android.content.DialogInterface.OnClickListener() { 
+            @Override 
+            public void onClick(DialogInterface dialog, int which) { 
+                dialog.dismiss(); 
+            } 
+        }); 
+        builder.create().show(); 
 	}
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,19 +124,19 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 				Intent intent_add = new Intent(_BaseSlidingActivity.this,
 						A_MainActivity.class);
 				startActivity(intent_add);
+				finish();
 				break;
 			case R.id.menu_tv_list:
 				Intent intent_list = new Intent(_BaseSlidingActivity.this,
 						B_ListContentActivity.class);
 				startActivity(intent_list);
+				finish();
 				break;
 			case R.id.actionbar_iv_menu:
 				toggle();
 				break;
 			case R.id.actionbar_iv_setting:
-				Intent intent_b_add = new Intent(
-						_BaseSlidingActivity.this,B_EditContentActivity.class);
-				startActivity(intent_b_add);
+				goSettingButton();
 				break;
 			default:
 				break;
@@ -118,4 +145,7 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 	};
 	/** 设置当前layout **/
 	protected abstract void setOwnView();
+
+	/** 点击设置键 **/
+	protected abstract void goSettingButton();
 }

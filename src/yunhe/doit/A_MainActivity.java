@@ -1,6 +1,7 @@
 package yunhe.doit;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -11,16 +12,16 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import yunhe.database.ContentDBUtil;
 import yunhe.model.ActivityShowContentModel;
 import yunhe.model.ContentModel;
+import yunhe.receiver.AlarmReceiver;
 import yunhe.util.Constants;
 import yunhe.util.DateUtil;
 import yunhe.util.ListTitleGradientColorEnum;
 import yunhe.view.SwipeDismissListView;
 import yunhe.view.SwipeDismissListView.OnDismissCallback;
 import android.os.Bundle;
-import android.app.AlertDialog;
-import android.app.AlertDialog.Builder;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
@@ -35,55 +36,28 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class A_MainActivity extends _BaseSlidingActivity {
 	private GridView gridDate_day;
 	private GridView gridDate_week;
-	private SwipeDismissListView listTitle;
 	
 	/** 日期栏的数据list [0]日,[1]星期,[2]整体,[3]yyyy,[4]月**/
 	private List<String[]> dateList = new ArrayList<String[]>();
-	/** 信息栏的数据集合 **/
-	List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>();
 	/** 偏差日期，初始加载为0 **/
 	private int dateRate = 0;
 	/** 日期栏的适配器，用于GridView容器的信息变更 **/
 	private GridViewAdapter adapter_week ;
 	private GridViewAdapter adapter_day ;
+	
+	private SwipeDismissListView listTitle;
+	/** 信息栏的数据集合 **/
+	List<Map<String, Object>> listItem = new ArrayList<Map<String, Object>>();
+	List<Map<String, Object>> listItemDone = new ArrayList<Map<String, Object>>();
+	List<Map<String, Object>> listItemAll = new ArrayList<Map<String, Object>>();
 	/** 信息栏的适配器，用于信息ListView容器的信息变更 **/
 	private SimpleAdapter listItemAdapter;
 	
-	private SwipeDismissListView listTitle_done;
-	List<Map<String, Object>> listItem_done = new ArrayList<Map<String, Object>>();
-	private SimpleAdapter listItemDoneAdapter;
-	
-	@Override
-	public void onBackPressed() {
-		exitDialog();
-	}
-	
-	private void exitDialog() {
-        AlertDialog.Builder builder = new Builder(A_MainActivity.this); 
-        builder.setMessage("确定要退出吗?"); 
-        builder.setTitle("提示"); 
-        builder.setPositiveButton("确认", 
-        new android.content.DialogInterface.OnClickListener() { 
-            @Override 
-            public void onClick(DialogInterface dialog, int which) { 
-                dialog.dismiss(); 
-               android.os.Process.killProcess(android.os.Process.myPid()); 
-            } 
-        }); 
-        builder.setNegativeButton("取消", 
-        new android.content.DialogInterface.OnClickListener() { 
-            @Override 
-            public void onClick(DialogInterface dialog, int which) { 
-                dialog.dismiss(); 
-            } 
-        }); 
-        builder.create().show(); 
-	}
-
 	@Override
 	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
 		getSupportMenuInflater().inflate(R.menu.a_button_menu, menu);
@@ -92,6 +66,11 @@ public class A_MainActivity extends _BaseSlidingActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		initView(getSlidingMenu());
+	}
+	@Override
+	protected void onResume() {
+		super.onResume();
 		initView(getSlidingMenu());
 	}
 	/** 初始化视图控件  **/
@@ -143,15 +122,24 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		ContentDBUtil dbUtil = new ContentDBUtil();
 		listItem = dbUtil.queryContentForList(
 				DateUtil.returnDateTo_yyyy_MM_dd(new Date()),ContentModel.ISDONE_NOT, this);
+		listItemDone = dbUtil.queryContentForList(
+				DateUtil.returnDateTo_yyyy_MM_dd(new Date()),ContentModel.ISDONE, this);
+		listItemAll.clear();
+		listItemAll.addAll(listItem);
+		listItemAll.addAll(listItemDone);
 		// 生成适配器的Item和动态数组对应的元素
-		listItemAdapter = new SimpleAdapter(this, listItem,// 数据源
+		listItemAdapter = new SimpleAdapter(this, listItemAll,// 数据源
 			R.layout.a_main_listitem_title,// ListItem的XML实现
 			// 动态数组与ImageItem对应的子项
 			new String[] {ActivityShowContentModel.ITEM_TIME,
-				ActivityShowContentModel.ITEM_TITLE},
+				ActivityShowContentModel.ITEM_TITLE,
+				ActivityShowContentModel.ITEM_ISDONE,
+				ActivityShowContentModel.ITEM_ISALARM},
 			// ImageItem的XML文件里面的一个ImageView,两个TextView ID
 			new int[] { R.id.tv_contentlist_time,
-				R.id.tv_contentlist_title}){
+				R.id.tv_contentlist_title,
+				R.id.tv_contentlist_isdone,
+				R.id.tv_contentlist_isalarm}){
 			@Override
 			public View getView(int position, View convertView,
 					ViewGroup parent) {
@@ -161,81 +149,121 @@ public class A_MainActivity extends _BaseSlidingActivity {
 				int colors[] = ListTitleGradientColorEnum.values()[position%11].getGradientColors();
 				GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
 				convertView.findViewById(R.id.tv_content_split).setBackground(gd);
-				if(position==0){
-					convertView.setBackground(getResources().getDrawable(R.drawable.listtextcolorshape));
+				TextView tvDone = (TextView)convertView.findViewById(R.id.tv_contentlist_isdone);
+				if(tvDone.getText().equals(ContentModel.ISDONE)){
+					convertView.setBackgroundColor(Color.parseColor("#CCCCCC"));
+				}else{
+					if(position==0){
+						convertView.setBackground(getResources().getDrawable(R.drawable.listtextcolorshape));
+					}else{
+						convertView.setBackgroundColor(Color.WHITE);
+					}
+				}
+				TextView tvAlarm = (TextView)convertView.findViewById(R.id.tv_contentlist_isalarm);
+				if(tvAlarm.getText().equals(ContentModel.ISALARM)){
+					convertView.findViewById(R.id.iv_alarm).setVisibility(View.VISIBLE);
+				}else{
+					convertView.findViewById(R.id.iv_alarm).setVisibility(View.GONE);
 				}
 				return convertView;
 			}
 		};
+		
 		// 添加并且显示
 		listTitle = (SwipeDismissListView) findViewById(R.id.main_titles_lv);
 		listTitle.setAdapter(listItemAdapter);
 		listTitle.setOnDismissCallback(new OnDismissCallback() {  
-            @Override  
-            public void onDismiss(int dismissPosition, boolean isLeft) {
+            @Override
+            public void onDismiss(View dismissView,int dismissPosition, boolean isLeft) {
             	HashMap<String,Object> map = (HashMap<String,Object>)
         				listTitle.getItemAtPosition(dismissPosition);
             	ContentDBUtil dbUtil = new ContentDBUtil();
-            	if(isLeft){
-            		dbUtil.deleteContentById(map.get(ActivityShowContentModel.ITEM_ID).toString()
-							, A_MainActivity.this);
-            		listItem.remove(dismissPosition);
-					listItemAdapter.notifyDataSetChanged();
-            	}else{
-            		//下降操作
-					dbUtil.changeContentStatusById(map.get(ActivityShowContentModel.ITEM_ID).toString()
-							, A_MainActivity.this,false);
-					listItem_done.add(listItem.remove(dismissPosition));
-					listItemAdapter.notifyDataSetChanged();
-					listItemDoneAdapter.notifyDataSetChanged();
+            	if(ContentModel.ISDONE.equals(	//已完成部分操作
+            			map.get(ActivityShowContentModel.ITEM_ISDONE))){
+                	if(isLeft){	//删除已完成项
+                		dbUtil.deleteContentById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+    							, A_MainActivity.this);
+                		listItemDone.remove(dismissPosition-listItem.size());
+                		resetList();
+                	}else{		//置为未完成
+    					dbUtil.changeContentStatusById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+    							, A_MainActivity.this,true);
+    					map.put(ActivityShowContentModel.ITEM_ISDONE, ContentModel.ISDONE_NOT);
+    					listItem.add(listItemDone.remove(dismissPosition-listItem.size()));
+    					resetList();
+                	}
+            	}else{	//未完成部分操作
+	            	if(isLeft){	//增加一次性闹钟
+	            		View alarmView = dismissView.findViewById(R.id.iv_alarm);
+	            		if(ContentModel.ISALARM_NOT.equals(	//无闹钟
+	                			map.get(ActivityShowContentModel.ITEM_ISALARM))){
+	            			//建立Intent和PendingIntent来调用闹钟管理器
+	            			Intent intent = new Intent(A_MainActivity.this, AlarmReceiver.class);  
+	            			intent.setAction("ALARM_ACTION");
+	            			intent.putExtra(AlarmReceiver.EXTRA_MSG,map.get
+	            					(ActivityShowContentModel.ITEM_TITLE).toString()+"该执行啦" );
+	            			PendingIntent pi = PendingIntent.getBroadcast(
+	                                A_MainActivity.this, Integer.parseInt(
+	                                		map.get(ActivityShowContentModel.ITEM_ID).toString()), intent, 0);
+	            			
+	            			// 根据用户选择时间来设置Calendar对象  
+	            			Calendar c = Calendar.getInstance();  
+	            			// 根据用户选择时间来设置Calendar对象  
+                            c.setTimeInMillis(System.currentTimeMillis());  
+                            String[] time = map.get(ActivityShowContentModel.ITEM_TIME).toString().split(":");
+                            c.set(Calendar.HOUR_OF_DAY , Integer.parseInt(time[0]));
+                            c.set(Calendar.MINUTE , Integer.parseInt(time[1]));
+                            
+                            //获取闹钟管理器
+                            AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+                            //设置闹钟
+                            alarmManager.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pi);
+                            // 显示闹铃设置成功的提示信息  
+                            Toast.makeText(A_MainActivity.this ,"闹铃设置成功",Toast.LENGTH_SHORT).show();
+	            			
+	            			dbUtil.changeContentAlarmById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+									, A_MainActivity.this,true);
+	            			alarmView.setVisibility(View.VISIBLE);
+	            			map.put(ActivityShowContentModel.ITEM_ISALARM, ContentModel.ISALARM);
+	            		}else{	//取消闹钟
+	            			Intent intent = new Intent(A_MainActivity.this, AlarmReceiver.class);  
+	            			intent.setAction("ALARM_ACTION");
+	            			PendingIntent pi = PendingIntent.getBroadcast(  
+	                                A_MainActivity.this, Integer.parseInt(
+	                                		map.get(ActivityShowContentModel.ITEM_ID).toString()), intent, 0);
+	            			//获取闹钟管理器
+                            AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
+                            //设置闹钟
+                            alarmManager.cancel(pi);
+                            Toast.makeText(A_MainActivity.this ,"闹铃已取消",Toast.LENGTH_SHORT).show();  
+	            			
+	            			dbUtil.changeContentAlarmById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+									, A_MainActivity.this,false);
+	            			alarmView.setVisibility(View.GONE);
+	            			map.put(ActivityShowContentModel.ITEM_ISALARM, ContentModel.ISALARM_NOT);
+	            		}
+	            	}else{		//置为已完成
+						dbUtil.changeContentStatusById(map.get(ActivityShowContentModel.ITEM_ID).toString()
+								, A_MainActivity.this,false);
+    					map.put(ActivityShowContentModel.ITEM_ISDONE, ContentModel.ISDONE);
+						listItemDone.add(listItem.remove(dismissPosition));
+						resetList();
+	            	}
             	}
             }
+
+			private void resetList() {
+				listItemAll.clear();
+				listItemAll.addAll(listItem);
+				listItemAll.addAll(listItemDone);
+				listItemAdapter.notifyDataSetChanged();
+			}
 
 			@Override
 			public void onEdit(int dismissPosition) {
 				goIntentEdit(dismissPosition);
 			}
         });  
-		
-		listItem_done = dbUtil.queryContentForList(
-				DateUtil.returnDateTo_yyyy_MM_dd(new Date()),ContentModel.ISDONE, this);
-		// 生成适配器的Item和动态数组对应的元素
-		listItemDoneAdapter = new SimpleAdapter(this, listItem_done,// 数据源
-			R.layout.a_main_listitem_title_done,// ListItem的XML实现
-			// 动态数组与ImageItem对应的子项
-			new String[] {ActivityShowContentModel.ITEM_TIME,
-					ActivityShowContentModel.ITEM_TITLE},
-				// ImageItem的XML文件里面的一个ImageView,两个TextView ID
-				new int[] { R.id.tv_contentlist_time_done,
-					R.id.tv_contentlist_title_done});
-		// 添加并且显示
-		listTitle_done = (SwipeDismissListView) findViewById(R.id.main_titles_done_lv);
-		listTitle_done.setAdapter(listItemDoneAdapter);
-		listTitle_done.setOnDismissCallback(new OnDismissCallback() {
-            @Override  
-            public void onDismiss(int dismissPosition, boolean isLeft) {
-            	HashMap<String,Object> map = (HashMap<String,Object>)
-        				listTitle_done.getItemAtPosition(dismissPosition);
-            	ContentDBUtil dbUtil = new ContentDBUtil();
-            	if(isLeft){
-            		dbUtil.deleteContentById(map.get(ActivityShowContentModel.ITEM_ID).toString()
-							, A_MainActivity.this);
-            		listItem_done.remove(dismissPosition);
-					listItemDoneAdapter.notifyDataSetChanged();
-            	}else{
-            		//上升操作
-					dbUtil.changeContentStatusById(map.get(ActivityShowContentModel.ITEM_ID).toString()
-							, A_MainActivity.this,true);
-					listItem.add(listItem_done.remove(dismissPosition));
-					listItemAdapter.notifyDataSetChanged();
-					listItemDoneAdapter.notifyDataSetChanged();
-            	}
-            }
-
-			@Override
-			public void onEdit(int dismissPosition) {}
-        });
-		
 	}
 	/**
 	 * 跳转到编辑页面
@@ -245,10 +273,12 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		ContentDBUtil dbUtil = new ContentDBUtil();
 		HashMap<String,Object> map = (HashMap<String,Object>)
 				listTitle.getItemAtPosition(position);
-		ContentModel model = dbUtil.queryContentForDetail(
-				map.get(ActivityShowContentModel.ITEM_ID).toString(), A_MainActivity.this);
-		intent_edit.putExtra(Constants.DETAIL_MODEL, model);
-		startActivity(intent_edit);
+		if(ContentModel.ISDONE_NOT.equals(map.get(ActivityShowContentModel.ITEM_ISDONE))){
+			ContentModel model = dbUtil.queryContentForDetail(
+					map.get(ActivityShowContentModel.ITEM_ID).toString(), A_MainActivity.this);
+			intent_edit.putExtra(Constants.DETAIL_MODEL, model);
+			startActivity(intent_edit);
+		}
 	}
 	/** 日期栏的适配器，用于GridView容器的信息变更 **/
 	private class GridViewAdapter extends BaseAdapter {
@@ -341,12 +371,10 @@ public class A_MainActivity extends _BaseSlidingActivity {
 								String paramDate = DateUtil.returnDDMMMEEETo_yyyy_MM_dd(str);
 								listItem.addAll(dbUtil.queryContentForList(paramDate
 										,ContentModel.ISDONE_NOT, A_MainActivity.this));
-								listItemAdapter.notifyDataSetChanged();
-								listItem_done.clear();
-								listItem_done.addAll(dbUtil.queryContentForList(
+								listItem.addAll(dbUtil.queryContentForList(
 										DateUtil.returnDDMMMEEETo_yyyy_MM_dd(str)
-										,ContentModel.ISDONE_NOT, A_MainActivity.this));
-								listItemDoneAdapter.notifyDataSetChanged();
+										,ContentModel.ISDONE, A_MainActivity.this));
+								listItemAdapter.notifyDataSetChanged();
 								changeTitle(!DateUtil.checkTodayByYyyy_MM_dd(paramDate),position);
 								break;
 						}
@@ -410,5 +438,25 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		}else{
 			mTvTitle.setText(R.string.main_title);
 		}
+	}
+
+	@Override
+	protected void goSettingButton() {
+		dateRate = 0;
+		
+		ContentDBUtil dbUtil = new ContentDBUtil();
+		listItem.clear();
+		listItem.addAll(dbUtil.queryContentForList(DateUtil.returnDateTo_yyyy_MM_dd(new Date())
+				,ContentModel.ISDONE_NOT, A_MainActivity.this));
+		listItem.addAll(dbUtil.queryContentForList(
+				DateUtil.returnDateTo_yyyy_MM_dd(new Date())
+				,ContentModel.ISDONE, A_MainActivity.this));
+		listItemAdapter.notifyDataSetChanged();
+		changeTitle(false,-1);
+		
+		dateList = DateUtil.returnRoundMonth(dateRate);
+		adapter_day.notifyDataSetChanged();
+		adapter_week.notifyDataSetChanged();
+		
 	}
 }

@@ -281,7 +281,7 @@ public class SwipeDismissListView extends ListView {
 			@Override
 			public void onAnimationEnd(Animator animation) {
 				if (onDismissCallback != null) {
-					onDismissCallback.onDismiss(dismissPosition,isLeft);
+					onDismissCallback.onDismiss(dismissView,dismissPosition,isLeft);
 				}
 
 				//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
@@ -313,7 +313,7 @@ public class SwipeDismissListView extends ListView {
 	 * 
 	 */
 	public interface OnDismissCallback {
-		public abstract void onDismiss(int dismissPosition, boolean isLeft);
+		public abstract void onDismiss(View dismissView, int dismissPosition, boolean isLeft);
 		public abstract void onEdit(int dismissPosition);
 	}
 

@@ -8,7 +8,8 @@ public class ContentModel implements Parcelable {
 	public static final String TABLENAME = "Content";
 	public static final String ISDONE = "1";
 	public static final String ISDONE_NOT = "0";
-
+	public static final String ISALARM = "1";
+	public static final String ISALARM_NOT = "0";
 	/**
 	 * 数据库字段定义 id、标题、内容
 	 * **/
@@ -18,6 +19,7 @@ public class ContentModel implements Parcelable {
 	public static final String FIELD_DATE = "date";
 	public static final String FIELD_TIME = "time";
 	public static final String FIELD_ISDONE = "isDone";
+	public static final String FIELD_ISALARM = "isAlarm";
 	/** 数据库字段定义END **/
 
 	private int id;
@@ -26,6 +28,7 @@ public class ContentModel implements Parcelable {
 	private String date;
 	private String time;
 	private String isDone;
+	private String isAlarm;
 
 	public String getIsDone() {
 		return isDone;
@@ -33,6 +36,14 @@ public class ContentModel implements Parcelable {
 
 	public void setIsDone(String isDone) {
 		this.isDone = isDone;
+	}
+
+	public String getIsAlarm() {
+		return isAlarm;
+	}
+
+	public void setIsAlarm(String isAlarm) {
+		this.isAlarm = isAlarm;
 	}
 
 	public String getDate() {
@@ -76,13 +87,14 @@ public class ContentModel implements Parcelable {
 	}
 
 	public ContentModel(int id, String title, String content, String date,
-			String time,String isDone) {
+			String time,String isDone,String isAlarm) {
 		this.id = id;
 		this.title = title;
 		this.content = content;
 		this.date = date;
 		this.time = time;
 		this.isDone = isDone;
+		this.isAlarm = isAlarm;
 	}
 
 	@Override
@@ -98,6 +110,7 @@ public class ContentModel implements Parcelable {
 		dest.writeString(this.date);
 		dest.writeString(this.time);
 		dest.writeString(this.isDone);
+		dest.writeString(this.isAlarm);
 	}
 
 	public ContentModel() {
@@ -109,7 +122,7 @@ public class ContentModel implements Parcelable {
 			// 从Parcel中读取数据，返回ContentModel对象
 			return new ContentModel(source.readInt(), source.readString(),
 					source.readString(), source.readString(),
-					source.readString(),source.readString());
+					source.readString(),source.readString(),source.readString());
 		}
 
 		@Override
