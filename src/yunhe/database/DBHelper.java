@@ -45,7 +45,8 @@ public class DBHelper extends SQLiteOpenHelper{
 				"'" +UserInfoModel.FIELD_NAME+"' VARCHAR ," +
 				"'" +UserInfoModel.FIELD_DATE+"' VARCHAR ," +
 				"'" +UserInfoModel.FIELD_MALE+"' VARCHAR ," +
-				"'" +UserInfoModel.FIELD_WEIBO+"' VARCHAR " +
+				"'" +UserInfoModel.FIELD_WEIBO+"' VARCHAR ," +
+				"'" +UserInfoModel.FIELD_IMGPATH+"' VARCHAR " +
 				");";
 		db.execSQL(sql_userInfo);
 	}

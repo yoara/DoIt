@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 public class UserInfoDBUtil {
 	private final static int USER_INFO_ID = 1;
 	private UserInfoDBUtil(){};
-	private static UserInfoDBUtil dbUtil;
+	private static UserInfoDBUtil dbUtil = new UserInfoDBUtil();
 	public static UserInfoDBUtil getInstance(){
 		return dbUtil;
 	}
@@ -97,7 +97,7 @@ public class UserInfoDBUtil {
 		//id、标题、内容、日期、时间
 		Cursor cursor = db.query(UserInfoModel.TABLENAME,
 				new String[]{UserInfoModel.FIELD_ID,UserInfoModel.FIELD_NAME,UserInfoModel.FIELD_DATE,
-				UserInfoModel.FIELD_MALE,UserInfoModel.FIELD_WEIBO,
+				UserInfoModel.FIELD_MALE,UserInfoModel.FIELD_WEIBO,UserInfoModel.FIELD_IMGPATH
 				}, 										//返回的列
 				UserInfoModel.FIELD_ID +"=? ", 			//where 字句：name=?
 				new String[]{""+USER_INFO_ID}, 			//字句参数
@@ -123,6 +123,7 @@ public class UserInfoDBUtil {
             model.setDate(cursor.getString(cursor.getColumnIndex(UserInfoModel.FIELD_DATE)));
             model.setMale(cursor.getString(cursor.getColumnIndex(UserInfoModel.FIELD_MALE)));
             model.setWeibo(cursor.getString(cursor.getColumnIndex(UserInfoModel.FIELD_WEIBO)));
+            model.setImgPath(cursor.getString(cursor.getColumnIndex(UserInfoModel.FIELD_IMGPATH)));
     		break;
         }
 		if(hasResult){
