@@ -196,18 +196,18 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 	protected void setAppBackground(String path) {
 		if(path==null){
 			if(this instanceof B_ListContentActivity){
-				findViewById(R.layout.activity_b_list)
+				findViewById(R.id.b_main_id)
 					.setBackgroundResource(R.drawable.ic_launcher);
 			}else{
-				findViewById(R.layout.activity_a_main)
+				findViewById(R.id.a_main_id)
 					.setBackgroundResource(R.drawable.ic_launcher);
 			}
 		}else{
 			if(this instanceof B_ListContentActivity){
-				findViewById(R.layout.activity_b_list)
+				findViewById(R.id.b_main_id)
 					.setBackground(BitmapDrawable.createFromPath(path));
 			}else{
-				findViewById(R.layout.activity_a_main)
+				findViewById(R.id.a_main_id)
 					.setBackground(BitmapDrawable.createFromPath(path));
 			}
 		}
