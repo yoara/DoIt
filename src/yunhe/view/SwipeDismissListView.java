@@ -214,7 +214,6 @@ public class SwipeDismissListView extends ListView {
 			dismiss = true;
 			dismissRight = mVelocityTracker.getXVelocity() > 0;
 		}
-		System.out.println(dismiss);
 		//判断是左滑还是右滑
 		final boolean isLeft = deltaX<0?true:false;
 		

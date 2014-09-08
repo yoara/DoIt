@@ -10,8 +10,10 @@ import java.util.Map;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import yunhe.database.ContentDBUtil;
+import yunhe.database.UserInfoDBUtil;
 import yunhe.model.ActivityShowContentModel;
 import yunhe.model.ContentModel;
+import yunhe.model.UserInfoModel;
 import yunhe.receiver.AlarmReceiver;
 import yunhe.util.Constants;
 import yunhe.util.DateUtil;
@@ -24,6 +26,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -150,14 +153,21 @@ public class A_MainActivity extends _BaseSlidingActivity {
 				GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
 				convertView.findViewById(R.id.tv_content_split).setBackground(gd);
 				TextView tvDone = (TextView)convertView.findViewById(R.id.tv_contentlist_isdone);
+				
+				TextView tvTitle = (TextView)convertView.findViewById(R.id.tv_contentlist_title);
+				TextView tvTime = (TextView)convertView.findViewById(R.id.tv_contentlist_time);
 				if(tvDone.getText().equals(ContentModel.ISDONE)){
 					convertView.setBackgroundColor(Color.parseColor("#CCCCCC"));
+					tvTitle.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
+					tvTime.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG);
 				}else{
 					if(position==0){
 						convertView.setBackground(getResources().getDrawable(R.drawable.listtextcolorshape));
 					}else{
 						convertView.setBackgroundColor(Color.WHITE);
 					}
+					tvTitle.getPaint().setFlags(Paint. HINTING_OFF);
+					tvTime.getPaint().setFlags(Paint. HINTING_OFF);
 				}
 				TextView tvAlarm = (TextView)convertView.findViewById(R.id.tv_contentlist_isalarm);
 				if(tvAlarm.getText().equals(ContentModel.ISALARM)){
@@ -442,7 +452,9 @@ public class A_MainActivity extends _BaseSlidingActivity {
 
 	@Override
 	protected void goSettingButton() {
-		dateRate = 0;
+		super.goSettingButton();
+		/** 回到当前日期 **/
+/*		dateRate = 0;
 		
 		ContentDBUtil dbUtil = new ContentDBUtil();
 		listItem.clear();
@@ -456,7 +468,7 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		
 		dateList = DateUtil.returnRoundMonth(dateRate);
 		adapter_day.notifyDataSetChanged();
-		adapter_week.notifyDataSetChanged();
+		adapter_week.notifyDataSetChanged();*/
 		
 	}
 }

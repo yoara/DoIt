@@ -10,6 +10,11 @@ import android.database.sqlite.SQLiteDatabase;
 /** 用户信息表操作类 **/
 public class UserInfoDBUtil {
 	private final static int USER_INFO_ID = 1;
+	private UserInfoDBUtil(){};
+	private static UserInfoDBUtil dbUtil;
+	public static UserInfoDBUtil getInstance(){
+		return dbUtil;
+	}
 	/***
 	 * 保存数据到数据库
 	 * @param model 用户信息对象{@link UserInfoModel}
@@ -24,6 +29,34 @@ public class UserInfoDBUtil {
 		db.close();
 		sqler.close();
 	}
+	
+	/**
+	 * 更新保存背景图片
+	 * @param 图片颜色
+	 * @param context 调用该操作的context
+	 */
+	public void updateBackgroundImg(String path,Context context){
+		ContentValues cv = new ContentValues();
+		/**存储字段**/
+		cv.put(UserInfoModel.FIELD_ID, USER_INFO_ID);
+		cv.put(UserInfoModel.FIELD_IMGPATH,path);
+		
+		DBHelper sqler = new DBHelper
+				(context,Constants.DATANAME,null,Constants.DB_VERSION);
+		SQLiteDatabase db = sqler.getWritableDatabase();
+		
+		UserInfoModel model = queryUserInfoForDetail(context);
+		if(model!=null){
+			db.update(UserInfoModel.TABLENAME, cv, 
+					UserInfoModel.FIELD_ID +"=? ", 
+					new String[]{""+USER_INFO_ID});
+		}else{
+			db.insert(UserInfoModel.TABLENAME, null, cv);
+		}
+		db.close();
+		sqler.close();
+	}
+	
 	/***
 	 * 更新数据到数据库
 	 * @param model 用户信息对象{@link UserInfoModel}

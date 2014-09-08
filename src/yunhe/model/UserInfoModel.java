@@ -15,6 +15,7 @@ public class UserInfoModel implements Parcelable {
 	public static final String FIELD_DATE = "date";
 	public static final String FIELD_MALE = "male";
 	public static final String FIELD_WEIBO = "weibo";
+	public static final String FIELD_IMGPATH = "imgPath";
 	/** 数据库字段定义END **/
 
 	private int id;
@@ -22,6 +23,7 @@ public class UserInfoModel implements Parcelable {
 	private String date;
 	private String male;
 	private String weibo;
+	private String imgPath;
 	
 	public int getId() {
 		return id;
@@ -61,6 +63,14 @@ public class UserInfoModel implements Parcelable {
 
 	public void setWeibo(String weibo) {
 		this.weibo = weibo;
+	}
+
+	public String getImgPath() {
+		return imgPath;
+	}
+
+	public void setImgPath(String imgPath) {
+		this.imgPath = imgPath;
 	}
 
 	public UserInfoModel(int id, String name, String date, String male,

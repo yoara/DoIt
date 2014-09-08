@@ -14,6 +14,7 @@ import yunhe.view.SwipeDismissListView;
 import yunhe.view.SwipeDismissListView.OnDismissCallback;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -73,14 +74,17 @@ public class B_ListContentActivity extends _BaseSlidingActivity {
 				GradientDrawable gd = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
 				convertView.findViewById(R.id.tv_b_content_split).setBackground(gd);
 				TextView tvDone = (TextView)convertView.findViewById(R.id.tv_b_contentlist_isdone);
+				TextView tvTitle = (TextView)convertView.findViewById(R.id.tv_b_contentlist_title);
 				if(tvDone.getText().equals(ContentModel.ISDONE)){
 					convertView.setBackgroundColor(Color.parseColor("#CCCCCC"));
+					tvTitle.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
 				}else{
 					if(position==0){
 						convertView.setBackground(getResources().getDrawable(R.drawable.listtextcolorshape));
 					}else{
 						convertView.setBackgroundColor(Color.WHITE);
 					}
+					tvTitle.getPaint().setFlags(Paint. HINTING_OFF); //中划线
 				}
 				return convertView;
 			}
@@ -148,8 +152,8 @@ public class B_ListContentActivity extends _BaseSlidingActivity {
 			ContentModel model = dbUtil.queryContentForDetail(
 					map.get(ActivityShowContentModel.ITEM_ID).toString(), B_ListContentActivity.this);
 			intent_edit.putExtra(Constants.DETAIL_MODEL, model);
+			startActivity(intent_edit);
 		}
-		startActivity(intent_edit);
 	}
 	
 	@Override
@@ -159,7 +163,6 @@ public class B_ListContentActivity extends _BaseSlidingActivity {
 	}
 	@Override
 	protected void goSettingButton() {
-		Intent intent_b_add = new Intent(this,B_EditContentActivity.class);
-		startActivity(intent_b_add);
+		super.goSettingButton();
 	}
 }

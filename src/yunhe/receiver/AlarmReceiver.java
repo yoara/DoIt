@@ -8,7 +8,6 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Parcel;
 
 public class AlarmReceiver extends BroadcastReceiver {
 	public static final String EXTRA_MSG = "msg";

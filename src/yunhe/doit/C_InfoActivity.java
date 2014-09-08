@@ -158,7 +158,7 @@ public class C_InfoActivity extends Activity {
 		model.setDate(textDate.getText().toString());
 		model.setMale(textMale.getText().toString());
 		model.setWeibo(weibo.getTag().toString());
-		UserInfoDBUtil dbUtil = new UserInfoDBUtil();
+		UserInfoDBUtil dbUtil = UserInfoDBUtil.getInstance();
 		if(hasUserInfo){
 			dbUtil.updateUserInfoDb(model, C_InfoActivity.this);
 		}else{

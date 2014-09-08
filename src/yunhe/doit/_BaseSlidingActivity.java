@@ -1,5 +1,6 @@
 package yunhe.doit;
 
+
 import yunhe.database.UserInfoDBUtil;
 import yunhe.model.UserInfoModel;
 import yunhe.util.Constants;
@@ -7,7 +8,10 @@ import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -114,23 +118,32 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 			case R.id.menu_iv_info:
 				Intent intent_info = new Intent(_BaseSlidingActivity.this,
 						C_InfoActivity.class);
-				UserInfoDBUtil dbUtil = new UserInfoDBUtil();
+				UserInfoDBUtil dbUtil = UserInfoDBUtil.getInstance();
 				UserInfoModel model = dbUtil.queryUserInfoForDetail
 						(_BaseSlidingActivity.this);
 				intent_info.putExtra(Constants.USERINFO_MODEL, model);
 				startActivity(intent_info);
 				break;
 			case R.id.menu_tv_main:
-				Intent intent_add = new Intent(_BaseSlidingActivity.this,
-						A_MainActivity.class);
-				startActivity(intent_add);
-				finish();
+				
+				if(_BaseSlidingActivity.this instanceof A_MainActivity){
+					toggle();
+				}else{
+					Intent intent_add = new Intent(_BaseSlidingActivity.this,
+							A_MainActivity.class);
+					startActivity(intent_add);
+					finish();
+				}
 				break;
 			case R.id.menu_tv_list:
-				Intent intent_list = new Intent(_BaseSlidingActivity.this,
-						B_ListContentActivity.class);
-				startActivity(intent_list);
-				finish();
+				if(_BaseSlidingActivity.this instanceof B_ListContentActivity){
+					toggle();
+				}else{
+					Intent intent_list = new Intent(_BaseSlidingActivity.this,
+							B_ListContentActivity.class);
+					startActivity(intent_list);
+					finish();
+				}
 				break;
 			case R.id.actionbar_iv_menu:
 				toggle();
@@ -143,9 +156,72 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 			}
 		}
 	};
+	
+	
 	/** 设置当前layout **/
 	protected abstract void setOwnView();
 
 	/** 点击设置键 **/
-	protected abstract void goSettingButton();
+	protected void goSettingButton(){
+		 Intent intent = new Intent();  
+        /* 开启Pictures画面Type设定为image */  
+        intent.setType("image/*");  
+        /* 使用Intent.ACTION_GET_CONTENT这个Action */  
+        intent.setAction(Intent.ACTION_GET_CONTENT);   
+        /* 取得相片后返回本画面 */  
+        startActivityForResult(intent, 1);
+	}
+	
+	/**
+	 * goSettingButton选取图片后触发
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			Uri uri = data.getData();
+			Log.e("uri", uri.toString());
+			UserInfoDBUtil db = UserInfoDBUtil.getInstance();
+			try{
+				String path = uri.getPath();
+				setAppBackground(path);
+				db.updateBackgroundImg(path,this);
+			}catch(Exception e){
+				db.updateBackgroundImg(null,this);
+			}
+		}
+		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+	/** 设置背景图片 **/
+	protected void setAppBackground(String path) {
+		if(path==null){
+			if(this instanceof B_ListContentActivity){
+				findViewById(R.layout.activity_b_list)
+					.setBackgroundResource(R.drawable.ic_launcher);
+			}else{
+				findViewById(R.layout.activity_a_main)
+					.setBackgroundResource(R.drawable.ic_launcher);
+			}
+		}else{
+			if(this instanceof B_ListContentActivity){
+				findViewById(R.layout.activity_b_list)
+					.setBackground(BitmapDrawable.createFromPath(path));
+			}else{
+				findViewById(R.layout.activity_a_main)
+					.setBackground(BitmapDrawable.createFromPath(path));
+			}
+		}
+	}
+	@Override
+	protected void onResume() {
+		super.onResume();
+		/* 设置背景图片 */
+		UserInfoDBUtil db = UserInfoDBUtil.getInstance();
+		UserInfoModel model = db.queryUserInfoForDetail(this);
+		if(model!=null&&model.getImgPath()!=null){
+			setAppBackground(model.getImgPath());
+		}else{
+			setAppBackground(null);
+		}
+	}
 }
