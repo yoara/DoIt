@@ -1,11 +1,14 @@
 package yunhe.doit;
 
 
+import java.io.FileNotFoundException;
+
 import yunhe.database.UserInfoDBUtil;
 import yunhe.model.UserInfoModel;
 import yunhe.util.Constants;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
+import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.BitmapDrawable;
@@ -16,6 +19,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
@@ -179,21 +183,17 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (resultCode == RESULT_OK) {
 			Uri uri = data.getData();
-			Log.e("uri", uri.toString());
 			UserInfoDBUtil db = UserInfoDBUtil.getInstance();
-			try{
-				String path = uri.getPath();
-				setAppBackground(path);
-				db.updateBackgroundImg(path,this);
-			}catch(Exception e){
-				db.updateBackgroundImg(null,this);
-			}
+			String path = null;
+			path = uri.getEncodedPath();
+			setAppBackground(path);
+			db.updateBackgroundImg(path,this);
 		}
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
-	/** 设置背景图片 **/
-	protected void setAppBackground(String path) {
+	/** 设置背景图片  **/
+	protected void setAppBackground(String path){
 		if(path==null){
 			if(this instanceof B_ListContentActivity){
 				findViewById(R.id.b_main_id)
@@ -203,12 +203,19 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 					.setBackgroundResource(R.drawable.ic_launcher);
 			}
 		}else{
-			if(this instanceof B_ListContentActivity){
-				findViewById(R.id.b_main_id)
-					.setBackground(BitmapDrawable.createFromPath(path));
-			}else{
-				findViewById(R.id.a_main_id)
-					.setBackground(BitmapDrawable.createFromPath(path));
+			try {
+				ContentResolver cr = this.getContentResolver();
+				Uri uri = Uri.parse("content://media"+path);
+				if(this instanceof B_ListContentActivity){
+						findViewById(R.id.b_main_id)
+							.setBackground(BitmapDrawable.createFromStream(cr.openInputStream(uri), "11"));
+				}else{
+					findViewById(R.id.a_main_id)
+						.setBackground(BitmapDrawable.createFromStream(cr.openInputStream(uri), "11"));
+				}
+			}catch (FileNotFoundException e) {
+				Toast.makeText(this ,"图片未找到",Toast.LENGTH_SHORT).show();
+				setAppBackground(null);
 			}
 		}
 	}
