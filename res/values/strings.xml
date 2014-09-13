@@ -17,6 +17,7 @@
     <string name="ev_editcontent_hint_title">标题</string>
     <string name="ev_editcontent_hint_content">输入内容</string>
     <string name="bt_editcontent_save">保存</string>
+    <string name="bt_editcontent_goon">添加</string>
     <string name="bt_editcontent_selectDate">选择时间</string>
     
     <!-- info activity -->

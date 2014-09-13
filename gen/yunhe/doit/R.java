@@ -1028,8 +1028,8 @@ containing a value of this type.
         public static final int sheding=0x7f020079;
     }
     public static final class id {
-        public static final int a_main_id=0x7f040047;
-        public static final int a_menu_button_add=0x7f040069;
+        public static final int a_main_id=0x7f040048;
+        public static final int a_menu_button_add=0x7f04006b;
         public static final int abs__action_bar=0x7f04002d;
         public static final int abs__action_bar_container=0x7f04002c;
         public static final int abs__action_bar_subtitle=0x7f04001e;
@@ -1069,70 +1069,72 @@ containing a value of this type.
         public static final int abs__textButton=0x7f040020;
         public static final int abs__title=0x7f040028;
         public static final int abs__up=0x7f04000b;
-        public static final int actionbar_frame=0x7f04004b;
-        public static final int actionbar_iv_menu=0x7f04004c;
-        public static final int actionbar_iv_setting=0x7f04004e;
-        public static final int actionbar_tv_title=0x7f04004d;
-        public static final int b_bt_saveContent=0x7f04004f;
-        public static final int b_et_editCont=0x7f040051;
-        public static final int b_et_editTitle=0x7f040050;
-        public static final int b_list_titles_lv=0x7f040053;
-        public static final int b_main_id=0x7f040052;
-        public static final int b_menu_button_add=0x7f04006a;
-        public static final int bt_c_info_save=0x7f04005c;
-        public static final int bt_c_info_saveDate=0x7f040065;
-        public static final int bt_c_male_boy=0x7f040067;
-        public static final int bt_c_male_girl=0x7f040066;
-        public static final int bt_editcontent_saveDate=0x7f040046;
+        public static final int actionbar_frame=0x7f04004c;
+        public static final int actionbar_iv_menu=0x7f04004d;
+        public static final int actionbar_iv_setting=0x7f04004f;
+        public static final int actionbar_tv_title=0x7f04004e;
+        public static final int b_bt_saveContent=0x7f040050;
+        public static final int b_bt_saveContent_go=0x7f040051;
+        public static final int b_et_editCont=0x7f040053;
+        public static final int b_et_editTitle=0x7f040052;
+        public static final int b_list_titles_lv=0x7f040055;
+        public static final int b_main_id=0x7f040054;
+        public static final int b_menu_button_add=0x7f04006c;
+        public static final int bt_c_info_save=0x7f04005e;
+        public static final int bt_c_info_saveDate=0x7f040067;
+        public static final int bt_c_male_boy=0x7f040069;
+        public static final int bt_c_male_girl=0x7f040068;
+        public static final int bt_editcontent_saveDate=0x7f040047;
         public static final int bt_saveContent=0x7f04003f;
-        public static final int cb_c_info_weibo=0x7f04005b;
-        public static final int datepicker=0x7f040044;
+        public static final int bt_saveContent_go=0x7f040040;
+        public static final int cb_c_info_weibo=0x7f04005d;
+        public static final int datepicker=0x7f040045;
         public static final int disableHome=0x7f040009;
-        public static final int dp_c_date_datePicker=0x7f040064;
+        public static final int dp_c_date_datePicker=0x7f040066;
         public static final int edit_query=0x7f040033;
-        public static final int et_c_info_editDate=0x7f040059;
-        public static final int et_c_info_male=0x7f04005a;
-        public static final int et_c_info_name=0x7f040058;
-        public static final int et_editCont=0x7f040043;
-        public static final int et_editDate=0x7f040041;
-        public static final int et_editTime=0x7f040042;
-        public static final int et_editTitle=0x7f040040;
+        public static final int et_c_info_editDate=0x7f04005b;
+        public static final int et_c_info_male=0x7f04005c;
+        public static final int et_c_info_name=0x7f04005a;
+        public static final int et_editCont=0x7f040044;
+        public static final int et_editDate=0x7f040042;
+        public static final int et_editTime=0x7f040043;
+        public static final int et_editTitle=0x7f040041;
         public static final int fullscreen=0x7f040013;
         public static final int homeAsUp=0x7f040006;
         public static final int iv_alarm=0x7f04001c;
-        public static final int iv_info_user=0x7f040057;
+        public static final int iv_info_user=0x7f040059;
         public static final int left=0x7f040010;
         public static final int listMode=0x7f040002;
-        public static final int listcontent_go_back=0x7f04005e;
-        public static final int listcontent_titles_lv=0x7f04005f;
+        public static final int listcontent_go_back=0x7f040060;
+        public static final int listcontent_titles_lv=0x7f040061;
         public static final int main_date_day_item=0x7f040015;
         public static final int main_date_week_item=0x7f040016;
-        public static final int main_day_gv=0x7f040049;
-        public static final int main_titles_lv=0x7f04004a;
-        public static final int main_week_gv=0x7f040048;
+        public static final int main_day_gv=0x7f04004a;
+        public static final int main_titles_lv=0x7f04004b;
+        public static final int main_week_gv=0x7f040049;
         public static final int margin=0x7f040012;
-        public static final int menu_frame=0x7f040060;
-        public static final int menu_iv_info=0x7f040061;
-        public static final int menu_tv_list=0x7f040063;
-        public static final int menu_tv_main=0x7f040062;
+        public static final int menu_frame=0x7f040062;
+        public static final int menu_iv_info=0x7f040063;
+        public static final int menu_tv_list=0x7f040065;
+        public static final int menu_tv_main=0x7f040064;
         public static final int normal=0x7f040001;
         public static final int right=0x7f040011;
         public static final int selected_view=0x7f040014;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
-        public static final int slidingmenumain=0x7f040068;
+        public static final int slidingmenumain=0x7f04006a;
         public static final int tabMode=0x7f040003;
-        public static final int timePicker=0x7f040045;
-        public static final int tv_b_content_split=0x7f040054;
-        public static final int tv_b_contentlist_isdone=0x7f040056;
-        public static final int tv_b_contentlist_title=0x7f040055;
+        public static final int timePicker=0x7f040046;
+        public static final int tv_b_content_split=0x7f040056;
+        public static final int tv_b_contentlist_isdone=0x7f040058;
+        public static final int tv_b_contentlist_title=0x7f040057;
         public static final int tv_content_split=0x7f040017;
         public static final int tv_contentlist_isalarm=0x7f04001b;
         public static final int tv_contentlist_isdone=0x7f04001a;
         public static final int tv_contentlist_time=0x7f040019;
         public static final int tv_contentlist_title=0x7f040018;
-        public static final int tv_info_showAbout=0x7f04005d;
+        public static final int tv_info_showAbout=0x7f04005f;
         public static final int useLogo=0x7f040004;
         public static final int wrap_content=0x7f040000;
     }
@@ -1229,23 +1231,24 @@ containing a value of this type.
         public static final int actionbar_go_menu=0x7f090014;
         public static final int actionbar_go_setting=0x7f090015;
         public static final int app_name=0x7f09000d;
+        public static final int bt_editcontent_goon=0x7f090019;
         public static final int bt_editcontent_save=0x7f090018;
-        public static final int bt_editcontent_selectDate=0x7f090019;
+        public static final int bt_editcontent_selectDate=0x7f09001a;
         /**  testFunction 
          */
-        public static final int bt_function_sfa=0x7f090026;
-        public static final int bt_info_male_boy=0x7f090023;
-        public static final int bt_info_male_girl=0x7f090022;
+        public static final int bt_function_sfa=0x7f090027;
+        public static final int bt_info_male_boy=0x7f090024;
+        public static final int bt_info_male_girl=0x7f090023;
         /**  listcontent 
          */
-        public static final int bt_listcontent_back=0x7f090025;
+        public static final int bt_listcontent_back=0x7f090026;
         public static final int ev_editcontent_hint_content=0x7f090017;
         /**  editcontent activity 
          */
         public static final int ev_editcontent_hint_title=0x7f090016;
-        public static final int ev_info_hint_birthday=0x7f09001d;
-        public static final int ev_info_hint_male=0x7f09001f;
-        public static final int ev_info_hint_name=0x7f09001b;
+        public static final int ev_info_hint_birthday=0x7f09001e;
+        public static final int ev_info_hint_male=0x7f090020;
+        public static final int ev_info_hint_name=0x7f09001c;
         public static final int main_title=0x7f090013;
         public static final int menu_go_add=0x7f090010;
         /**  main activity 
@@ -1254,14 +1257,14 @@ containing a value of this type.
         public static final int menu_go_list=0x7f090012;
         public static final int menu_go_main=0x7f090011;
         public static final int menu_settings=0x7f09000e;
-        public static final int tv_info_about=0x7f090020;
-        public static final int tv_info_birthday=0x7f09001c;
-        public static final int tv_info_male=0x7f09001e;
+        public static final int tv_info_about=0x7f090021;
+        public static final int tv_info_birthday=0x7f09001d;
+        public static final int tv_info_male=0x7f09001f;
         /**  info activity 
          */
-        public static final int tv_info_name=0x7f09001a;
-        public static final int tv_info_weibo=0x7f090021;
-        public static final int vt_info_about=0x7f090024;
+        public static final int tv_info_name=0x7f09001b;
+        public static final int tv_info_weibo=0x7f090022;
+        public static final int vt_info_about=0x7f090025;
     }
     public static final class style {
         public static final int AppTheme=0x7f0a0059;

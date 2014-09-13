@@ -8,6 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+import com.nineoldandroids.animation.Animator;
+import com.nineoldandroids.animation.AnimatorListenerAdapter;
+import com.nineoldandroids.animation.ValueAnimator;
+import com.nineoldandroids.view.ViewHelper;
+import com.nineoldandroids.view.ViewPropertyAnimator;
 
 import yunhe.database.ContentDBUtil;
 import yunhe.database.UserInfoDBUtil;
@@ -21,6 +26,7 @@ import yunhe.util.ListTitleGradientColorEnum;
 import yunhe.view.SwipeDismissListView;
 import yunhe.view.SwipeDismissListView.OnDismissCallback;
 import android.os.Bundle;
+import android.os.Handler;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -28,7 +34,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,6 +74,7 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		getSupportMenuInflater().inflate(R.menu.a_button_menu, menu);
 		return true;
 	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -401,7 +410,7 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		float x_tmp1 = 0.0f;
 		float x_tmp2 = 0.0f;
 		@Override
-		public boolean onTouch(View paramView, MotionEvent event) {
+		public boolean onTouch(final View paramView, MotionEvent event) {
 			/**
 			 * 判断是向左还是滑动方向
 			 */
@@ -414,17 +423,61 @@ public class A_MainActivity extends _BaseSlidingActivity {
 				case MotionEvent.ACTION_UP:
 					x_tmp2 = x;
 					
-					if(x_tmp1 - x_tmp2 > 50){
-						dateRate = dateRate+(DateUtil.AROUNDDAY*2+1);
-						dateList = DateUtil.returnRoundMonth(dateRate);
-						adapter_day.notifyDataSetChanged();
-						changeTitle(dateRate!=0,DateUtil.AROUNDDAY);
+					if(x_tmp1 - x_tmp2 > 50){	//往左
+						ViewPropertyAnimator.animate(paramView)
+							.translationX(x_tmp2 - x_tmp1)
+							.setDuration(500).setListener(new AnimatorListenerAdapter() {
+								@Override
+								public void onAnimationEnd(Animator animation) {
+									ValueAnimator animator = ValueAnimator.ofInt(paramView.getHeight(), 0).setDuration(50);
+									animator.start();
+
+									animator.addListener(new AnimatorListenerAdapter() {
+										@Override
+										public void onAnimationEnd(Animator animation) {
+											//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
+											//所以我们在动画执行完毕之后将item设置回来
+											ViewHelper.setAlpha(paramView, 1f);
+											ViewHelper.setTranslationX(paramView, 0);
+											dateRate = dateRate+(DateUtil.AROUNDDAY*2+1);
+											dateList = DateUtil.returnRoundMonth(dateRate);
+											changeTitle(dateRate!=0,DateUtil.AROUNDDAY);
+											adapter_day.notifyDataSetChanged();
+										}
+									});
+									
+//									ViewPropertyAnimator.animate(paramView)
+//										.translationX(0).alpha(1)
+//										.setDuration(50);
+
+								}
+						});
+						
 					}
-					if(x_tmp2 - x_tmp1 > 50){
-						dateRate = dateRate-(DateUtil.AROUNDDAY*2+1);
-						dateList = DateUtil.returnRoundMonth(dateRate);
-						adapter_day.notifyDataSetChanged();
-						changeTitle(dateRate!=0,DateUtil.AROUNDDAY);
+					if(x_tmp2 - x_tmp1 > 50){	//往右
+						ViewPropertyAnimator.animate(paramView)
+							.translationX(x_tmp2 - x_tmp1)
+							.setDuration(500).setListener(new AnimatorListenerAdapter() {
+								@Override
+								public void onAnimationEnd(Animator animation) {
+									ValueAnimator animator = ValueAnimator.ofInt(paramView.getHeight(), 0).setDuration(50);
+									animator.start();
+
+									animator.addListener(new AnimatorListenerAdapter() {
+										@Override
+										public void onAnimationEnd(Animator animation) {
+											//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
+											//所以我们在动画执行完毕之后将item设置回来
+											ViewHelper.setAlpha(paramView, 1f);
+											ViewHelper.setTranslationX(paramView, 0);
+											dateRate = dateRate-(DateUtil.AROUNDDAY*2+1);
+											dateList = DateUtil.returnRoundMonth(dateRate);
+											changeTitle(dateRate!=0,DateUtil.AROUNDDAY);
+											adapter_day.notifyDataSetChanged();
+										}
+									});
+								}
+						});
 					}
 					break;
 			}

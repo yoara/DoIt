@@ -32,7 +32,11 @@ public class A_EditContentActivity extends Activity {
 	EditText textDate;
 	EditText textTime;
 	Button save_bt;
+	Button save_bt_go;
 	Integer contentId;
+	
+	DatePicker datepicker;
+	TimePicker timepicker;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,14 +53,17 @@ public class A_EditContentActivity extends Activity {
 		textTitle = (EditText) findViewById(R.id.et_editTitle);
 		textContent = (EditText) findViewById(R.id.et_editCont);
 		
-		DatePicker datepicker = (DatePicker) builder.findViewById(R.id.datepicker);
-		TimePicker timepicker = (TimePicker) builder.findViewById(R.id.timePicker);
+		datepicker = (DatePicker) builder.findViewById(R.id.datepicker);
+		timepicker = (TimePicker) builder.findViewById(R.id.timePicker);
 		timeInit(datepicker, timepicker);
 		Button saveDate = (Button) builder.findViewById(R.id.bt_editcontent_saveDate);
 		saveDate.setOnClickListener(listener);
 		
 		save_bt = (Button) findViewById(R.id.bt_saveContent);
 		save_bt.setOnClickListener(listener);
+		
+		save_bt_go = (Button) findViewById(R.id.bt_saveContent_go);
+		save_bt_go.setOnClickListener(listener);
 		
 		setContentModel();
 	}
@@ -132,16 +139,27 @@ public class A_EditContentActivity extends Activity {
 	private OnClickListener listener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
+			String title = null;
 			switch (v.getId()) {
 			case R.id.bt_saveContent:
-				String title = textTitle.getText().toString();
+				title = textTitle.getText().toString();
 				if(title.trim().length()==0){
 					Toast.makeText(A_EditContentActivity.this, "请至少输入标题", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				saveContentIntoDb();
-				Toast.makeText(A_EditContentActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
 				finish();
+				break;
+			case R.id.bt_saveContent_go:
+				title = textTitle.getText().toString();
+				if(title.trim().length()==0){
+					Toast.makeText(A_EditContentActivity.this, "请至少输入标题", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				saveContentIntoDb();
+				clearAllInput();
+				timeInit(datepicker, timepicker);
+				Toast.makeText(A_EditContentActivity.this, "保存成功，请继续输入", Toast.LENGTH_SHORT).show();
 				break;
 			case R.id.bt_editcontent_saveDate:
 				builder.hide();
@@ -151,6 +169,14 @@ public class A_EditContentActivity extends Activity {
 			}
 		}
 	};
+
+	private void clearAllInput() {
+		textTitle.setText("");
+		textContent.setText("");
+		textDate.setText("");
+		textTime.setText("");
+	}
+	
 	private void saveContentIntoDb() {
 		ContentModel model = new ContentModel();
 		model.setTitle(textTitle.getText().toString());

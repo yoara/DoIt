@@ -3,14 +3,28 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
-	<Button
-	    android:id="@+id/b_bt_saveContent"
+	<LinearLayout
 	    android:layout_width="fill_parent"
 	    android:layout_height="0dp"
-	    android:layout_weight="1"
-	    android:text="@string/bt_editcontent_save" />
-	    <EditText
+	    android:orientation="horizontal" 
+	    android:layout_weight="1" >
+		<Button
+		    android:id="@+id/b_bt_saveContent"
+		    android:layout_width="0dp"
+		    android:layout_height="fill_parent"
+		    android:layout_weight="1"
+		    android:text="@string/bt_editcontent_save" />
+		<Button
+		    android:id="@+id/b_bt_saveContent_go"
+		    android:layout_width="0dp"
+		    android:layout_height="fill_parent"
+		    android:layout_weight="1"
+		    android:text="@string/bt_editcontent_goon" />
+	</LinearLayout>
+	
+	
+	
+	<EditText
         android:hint="@string/ev_editcontent_hint_title"
         android:id="@+id/b_et_editTitle"
         android:layout_width="fill_parent"

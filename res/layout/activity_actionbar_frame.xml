@@ -3,7 +3,8 @@
     android:id="@+id/actionbar_frame"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal" >
+    android:orientation="horizontal" 
+    android:background="#2C85D7">
 
     <ImageView
         android:id="@+id/actionbar_iv_menu"

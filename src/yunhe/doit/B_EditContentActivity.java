@@ -15,6 +15,7 @@ public class B_EditContentActivity extends Activity {
 	EditText textTitle;
 	EditText textContent;
 	Button save_bt;
+	Button save_bt_go;
 	Integer contentId;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -27,6 +28,8 @@ public class B_EditContentActivity extends Activity {
 		save_bt = (Button) findViewById(R.id.b_bt_saveContent);
 		save_bt.setOnClickListener(listener);
 		
+		save_bt_go = (Button) findViewById(R.id.b_bt_saveContent_go);
+		save_bt_go.setOnClickListener(listener);
 		setContentModel();
 	}
 	private void setContentModel() {
@@ -41,22 +44,36 @@ public class B_EditContentActivity extends Activity {
 	private OnClickListener listener = new OnClickListener() {
 		@Override
 		public void onClick(View v) {
+			String title = null;
 			switch (v.getId()) {
 			case R.id.b_bt_saveContent:
-				String title = textTitle.getText().toString();
+				title = textTitle.getText().toString();
 				if(title.trim().length()==0){
 					Toast.makeText(B_EditContentActivity.this, "请至少输入标题", Toast.LENGTH_SHORT).show();
 					return;
 				}
 				saveContentIntoDb();
-				Toast.makeText(B_EditContentActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
 				finish();
+				break;
+			case R.id.b_bt_saveContent_go:
+				title = textTitle.getText().toString();
+				if(title.trim().length()==0){
+					Toast.makeText(B_EditContentActivity.this, "请至少输入标题", Toast.LENGTH_SHORT).show();
+					return;
+				}
+				saveContentIntoDb();
+				clearAllInput();
+				Toast.makeText(B_EditContentActivity.this, "保存成功，请继续输入", Toast.LENGTH_SHORT).show();
 				break;
 			default:
 				break;
 			}
 		}
 	};
+	private void clearAllInput() {
+		textTitle.setText("");
+		textContent.setText("");
+	}
 	private void saveContentIntoDb() {
 		ContentModel model = new ContentModel();
 		model.setTitle(textTitle.getText().toString());
