@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <string name="app_name">DoIt</string>
@@ -9,17 +10,16 @@
     <string name="menu_go_main">日\n程</string>
     <string name="menu_go_list">清\n單 </string>
     <string name="main_title">幹它</string>
-    
     <string name="actionbar_go_menu">menu</string>
     <string name="actionbar_go_setting">setting</string>
-    
+
     <!-- editcontent activity -->
     <string name="ev_editcontent_hint_title">标题</string>
     <string name="ev_editcontent_hint_content">输入内容</string>
     <string name="bt_editcontent_save">保存</string>
     <string name="bt_editcontent_goon">添加</string>
     <string name="bt_editcontent_selectDate">选择时间</string>
-    
+
     <!-- info activity -->
     <string name="tv_info_name">Name</string>
     <string name="ev_info_hint_name">姓名</string>
@@ -29,15 +29,16 @@
     <string name="ev_info_hint_male">性别</string>
     <string name="tv_info_about">关于DoIt</string>
     <string name="tv_info_weibo">微博</string>
-    
     <string name="bt_info_male_girl">Girl</string>
     <string name="bt_info_male_boy">Boy</string>
-    
     <string name="vt_info_about">About</string>
-    
+
     <!-- listcontent -->
     <string name="bt_listcontent_back">返回</string>
-    
+
     <!-- testFunction -->
     <string name="bt_function_sfa">SFA</string>
+    <string name="title_activity_loading">LoadingActivity</string>
+    <string name="hello_world">Hello world!</string>
+
 </resources>

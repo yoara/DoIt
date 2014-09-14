@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import yunhe.database.ContentDBUtil;
+import yunhe.database.UserInfoDBUtil;
 import yunhe.model.ActivityShowContentModel;
 import yunhe.model.ContentModel;
 import yunhe.util.Constants;
@@ -40,6 +41,10 @@ public class B_ListContentActivity extends _BaseSlidingActivity {
 	protected void onResume() {
 		super.onResume();
 		initView();
+		
+		//增加默认加载项
+		UserInfoDBUtil db = UserInfoDBUtil.getInstance();
+		db.updateActivityFlag("B",this);
 	}
 	
 	@Override

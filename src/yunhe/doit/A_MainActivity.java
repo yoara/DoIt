@@ -84,6 +84,10 @@ public class A_MainActivity extends _BaseSlidingActivity {
 	protected void onResume() {
 		super.onResume();
 		initView(getSlidingMenu());
+		
+		//增加默认加载项
+		UserInfoDBUtil db = UserInfoDBUtil.getInstance();
+		db.updateActivityFlag("A",this);
 	}
 	/** 初始化视图控件  **/
 	private void initView(SlidingMenu menu) {

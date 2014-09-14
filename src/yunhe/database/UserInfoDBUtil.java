@@ -57,6 +57,32 @@ public class UserInfoDBUtil {
 		sqler.close();
 	}
 	
+	/**
+	 * 更新初始加载Activity
+	 * @param context 调用该操作的context
+	 */
+	public void updateActivityFlag(String activityFlag,Context context){
+		ContentValues cv = new ContentValues();
+		/**存储字段**/
+		cv.put(UserInfoModel.FIELD_ID, USER_INFO_ID);
+		cv.put(UserInfoModel.FIELD_INITACTIVITY,activityFlag);
+		
+		DBHelper sqler = new DBHelper
+				(context,Constants.DATANAME,null,Constants.DB_VERSION);
+		SQLiteDatabase db = sqler.getWritableDatabase();
+		
+		UserInfoModel model = queryUserInfoForDetail(context);
+		if(model!=null){
+			db.update(UserInfoModel.TABLENAME, cv, 
+					UserInfoModel.FIELD_ID +"=? ", 
+					new String[]{""+USER_INFO_ID});
+		}else{
+			db.insert(UserInfoModel.TABLENAME, null, cv);
+		}
+		db.close();
+		sqler.close();
+	}
+	
 	/***
 	 * 更新数据到数据库
 	 * @param model 用户信息对象{@link UserInfoModel}
@@ -97,7 +123,8 @@ public class UserInfoDBUtil {
 		//id、标题、内容、日期、时间
 		Cursor cursor = db.query(UserInfoModel.TABLENAME,
 				new String[]{UserInfoModel.FIELD_ID,UserInfoModel.FIELD_NAME,UserInfoModel.FIELD_DATE,
-				UserInfoModel.FIELD_MALE,UserInfoModel.FIELD_WEIBO,UserInfoModel.FIELD_IMGPATH
+				UserInfoModel.FIELD_MALE,UserInfoModel.FIELD_WEIBO,
+				UserInfoModel.FIELD_IMGPATH,UserInfoModel.FIELD_INITACTIVITY
 				}, 										//返回的列
 				UserInfoModel.FIELD_ID +"=? ", 			//where 字句：name=?
 				new String[]{""+USER_INFO_ID}, 			//字句参数
@@ -124,6 +151,7 @@ public class UserInfoDBUtil {
             model.setMale(cursor.getString(cursor.getColumnIndex(UserInfoModel.FIELD_MALE)));
             model.setWeibo(cursor.getString(cursor.getColumnIndex(UserInfoModel.FIELD_WEIBO)));
             model.setImgPath(cursor.getString(cursor.getColumnIndex(UserInfoModel.FIELD_IMGPATH)));
+            model.setInitAc(cursor.getString(cursor.getColumnIndex(UserInfoModel.FIELD_INITACTIVITY)));
     		break;
         }
 		if(hasResult){

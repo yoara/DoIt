@@ -1022,14 +1022,15 @@ containing a value of this type.
         public static final int jia=0x7f020073;
         public static final int listfrontcolorshape=0x7f020074;
         public static final int listtextcolorshape=0x7f020075;
-        public static final int new_indicator=0x7f020076;
-        public static final int shadow=0x7f020077;
-        public static final int shadowright=0x7f020078;
-        public static final int sheding=0x7f020079;
+        public static final int loading=0x7f020076;
+        public static final int new_indicator=0x7f020077;
+        public static final int shadow=0x7f020078;
+        public static final int shadowright=0x7f020079;
+        public static final int sheding=0x7f02007a;
     }
     public static final class id {
         public static final int a_main_id=0x7f040048;
-        public static final int a_menu_button_add=0x7f04006b;
+        public static final int a_menu_button_add=0x7f04006c;
         public static final int abs__action_bar=0x7f04002d;
         public static final int abs__action_bar_container=0x7f04002c;
         public static final int abs__action_bar_subtitle=0x7f04001e;
@@ -1073,24 +1074,25 @@ containing a value of this type.
         public static final int actionbar_iv_menu=0x7f04004d;
         public static final int actionbar_iv_setting=0x7f04004f;
         public static final int actionbar_tv_title=0x7f04004e;
+        public static final int activity_loading=0x7f040062;
         public static final int b_bt_saveContent=0x7f040050;
         public static final int b_bt_saveContent_go=0x7f040051;
         public static final int b_et_editCont=0x7f040053;
         public static final int b_et_editTitle=0x7f040052;
         public static final int b_list_titles_lv=0x7f040055;
         public static final int b_main_id=0x7f040054;
-        public static final int b_menu_button_add=0x7f04006c;
+        public static final int b_menu_button_add=0x7f04006d;
         public static final int bt_c_info_save=0x7f04005e;
-        public static final int bt_c_info_saveDate=0x7f040067;
-        public static final int bt_c_male_boy=0x7f040069;
-        public static final int bt_c_male_girl=0x7f040068;
+        public static final int bt_c_info_saveDate=0x7f040068;
+        public static final int bt_c_male_boy=0x7f04006a;
+        public static final int bt_c_male_girl=0x7f040069;
         public static final int bt_editcontent_saveDate=0x7f040047;
         public static final int bt_saveContent=0x7f04003f;
         public static final int bt_saveContent_go=0x7f040040;
         public static final int cb_c_info_weibo=0x7f04005d;
         public static final int datepicker=0x7f040045;
         public static final int disableHome=0x7f040009;
-        public static final int dp_c_date_datePicker=0x7f040066;
+        public static final int dp_c_date_datePicker=0x7f040067;
         public static final int edit_query=0x7f040033;
         public static final int et_c_info_editDate=0x7f04005b;
         public static final int et_c_info_male=0x7f04005c;
@@ -1113,17 +1115,17 @@ containing a value of this type.
         public static final int main_titles_lv=0x7f04004b;
         public static final int main_week_gv=0x7f040049;
         public static final int margin=0x7f040012;
-        public static final int menu_frame=0x7f040062;
-        public static final int menu_iv_info=0x7f040063;
-        public static final int menu_tv_list=0x7f040065;
-        public static final int menu_tv_main=0x7f040064;
+        public static final int menu_frame=0x7f040063;
+        public static final int menu_iv_info=0x7f040064;
+        public static final int menu_tv_list=0x7f040066;
+        public static final int menu_tv_main=0x7f040065;
         public static final int normal=0x7f040001;
         public static final int right=0x7f040011;
         public static final int selected_view=0x7f040014;
         public static final int showCustom=0x7f040008;
         public static final int showHome=0x7f040005;
         public static final int showTitle=0x7f040007;
-        public static final int slidingmenumain=0x7f04006a;
+        public static final int slidingmenumain=0x7f04006b;
         public static final int tabMode=0x7f040003;
         public static final int timePicker=0x7f040046;
         public static final int tv_b_content_split=0x7f040056;
@@ -1176,13 +1178,14 @@ containing a value of this type.
         public static final int activity_b_listitem_title=0x7f03001e;
         public static final int activity_c_info=0x7f03001f;
         public static final int activity_c_listcontent=0x7f030020;
-        public static final int activity_menu_frame=0x7f030021;
-        public static final int c_info_about_dialog=0x7f030022;
-        public static final int c_info_date_dialog=0x7f030023;
-        public static final int c_info_male_dialog=0x7f030024;
-        public static final int sherlock_spinner_dropdown_item=0x7f030025;
-        public static final int sherlock_spinner_item=0x7f030026;
-        public static final int slidingmenumain=0x7f030027;
+        public static final int activity_loading=0x7f030021;
+        public static final int activity_menu_frame=0x7f030022;
+        public static final int c_info_about_dialog=0x7f030023;
+        public static final int c_info_date_dialog=0x7f030024;
+        public static final int c_info_male_dialog=0x7f030025;
+        public static final int sherlock_spinner_dropdown_item=0x7f030026;
+        public static final int sherlock_spinner_item=0x7f030027;
+        public static final int slidingmenumain=0x7f030028;
     }
     public static final class menu {
         public static final int a_button_menu=0x7f0b0000;
@@ -1249,6 +1252,7 @@ containing a value of this type.
         public static final int ev_info_hint_birthday=0x7f09001e;
         public static final int ev_info_hint_male=0x7f090020;
         public static final int ev_info_hint_name=0x7f09001c;
+        public static final int hello_world=0x7f090029;
         public static final int main_title=0x7f090013;
         public static final int menu_go_add=0x7f090010;
         /**  main activity 
@@ -1257,6 +1261,7 @@ containing a value of this type.
         public static final int menu_go_list=0x7f090012;
         public static final int menu_go_main=0x7f090011;
         public static final int menu_settings=0x7f09000e;
+        public static final int title_activity_loading=0x7f090028;
         public static final int tv_info_about=0x7f090021;
         public static final int tv_info_birthday=0x7f09001d;
         public static final int tv_info_male=0x7f09001f;

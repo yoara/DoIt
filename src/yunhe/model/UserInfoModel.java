@@ -16,6 +16,7 @@ public class UserInfoModel implements Parcelable {
 	public static final String FIELD_MALE = "male";
 	public static final String FIELD_WEIBO = "weibo";
 	public static final String FIELD_IMGPATH = "imgPath";
+	public static final String FIELD_INITACTIVITY = "initAc";
 	/** 数据库字段定义END **/
 
 	private int id;
@@ -24,6 +25,7 @@ public class UserInfoModel implements Parcelable {
 	private String male;
 	private String weibo;
 	private String imgPath;
+	private String initAc;
 	
 	public int getId() {
 		return id;
@@ -74,12 +76,14 @@ public class UserInfoModel implements Parcelable {
 	}
 
 	public UserInfoModel(int id, String name, String date, String male,
-			String weibo) {
+			String weibo,String imgPath,String initAc) {
 		this.id = id;
 		this.name = name;
 		this.date = date;
 		this.male = male;
 		this.weibo = weibo;
+		this.imgPath = imgPath;
+		this.initAc = initAc;
 	}
 
 	@Override
@@ -94,6 +98,8 @@ public class UserInfoModel implements Parcelable {
 		dest.writeString(this.date);
 		dest.writeString(this.male);
 		dest.writeString(this.weibo);
+		dest.writeString(this.imgPath);
+		dest.writeString(this.initAc);
 	}
 
 	public UserInfoModel() {
@@ -105,7 +111,7 @@ public class UserInfoModel implements Parcelable {
 			// 从Parcel中读取数据，返回ContentModel对象
 			return new UserInfoModel(source.readInt(), source.readString(),
 					source.readString(), source.readString(),
-					source.readString());
+					source.readString(),source.readString(),source.readString());
 		}
 
 		@Override
@@ -113,4 +119,12 @@ public class UserInfoModel implements Parcelable {
 			return new UserInfoModel[size];
 		}
 	};
+
+	public String getInitAc() {
+		return initAc;
+	}
+
+	public void setInitAc(String initAc) {
+		this.initAc = initAc;
+	}
 }
