@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="yunhe.doit"
     android:versionCode="2"
-    android:versionName="2.5.6" xmlns:tools="http://schemas.android.com/tools">
+    android:versionName="@string/version" 
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-sdk
         android:minSdkVersion="16"

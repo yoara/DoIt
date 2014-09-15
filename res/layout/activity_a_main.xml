@@ -9,24 +9,58 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.65"
-        android:background="#2C85D7"
+        android:background="#FFFFFF"
         android:orientation="horizontal" >
         
-	    <GridView
-	        android:id="@+id/main_week_gv"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_gravity="center"
-	        android:gravity="center" >
-
-	    </GridView>
+	    <ImageView 
+	        android:src="@drawable/hehe_01"
+	        android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+	        />
+	    <ImageView 
+	        android:src="@drawable/hehe_02"
+	        android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+	        />
+	    <ImageView 
+	        android:src="@drawable/hehe_03"
+	        android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+	        />
+	    <ImageView 
+	        android:src="@drawable/hehe_04"
+	        android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+	        />
+	    <ImageView 
+	        android:src="@drawable/hehe_05"
+	        android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+	        />
+	    <ImageView 
+	        android:src="@drawable/hehe_06"
+	        android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+	        />
+	    <ImageView 
+	        android:src="@drawable/hehe_07"
+	        android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+	        />
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_weight="0.80"
         android:layout_height="0dp"
-        android:background="#2C85D7"
+        android:background="#FFFFFF"
         android:orientation="horizontal" >
         
 	    <GridView

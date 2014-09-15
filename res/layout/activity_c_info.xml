@@ -55,6 +55,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/tv_info_weibo" />
+    
+	<ImageView
+	        android:id="@+id/info_lv_setting"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:contentDescription="@string/info_setting"
+	        android:src="@drawable/huanfu" />
     <Button
 	    android:id="@+id/bt_c_info_save"
 	    android:layout_width="fill_parent"

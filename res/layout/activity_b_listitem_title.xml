@@ -16,7 +16,7 @@
         android:layout_gravity="center"
         android:layout_toRightOf="@+id/tv_b_content_split"
         android:gravity="center_vertical"
-        android:paddingLeft="3dp"
+        android:paddingLeft="12dp"
         android:textColor="#2C85D7"
         android:textSize="25sp" />
 

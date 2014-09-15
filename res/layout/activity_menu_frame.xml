@@ -15,7 +15,7 @@
         android:contentDescription="@string/menu_go_info"
         android:src="@android:drawable/btn_star_big_on" />
 
-    <TextView
+    <ImageView
         android:id="@+id/menu_tv_main"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -24,9 +24,10 @@
         android:gravity="center"
         android:textSize="45sp"
         android:textColor="#2C85D7"
-        android:text="@string/menu_go_main" />
+        android:contentDescription="@string/menu_go_main"
+        android:src="@drawable/richeng" />
 
-    <TextView
+    <ImageView
         android:id="@+id/menu_tv_list"
         android:layout_width="fill_parent"
         android:layout_height="0dp"
@@ -35,6 +36,7 @@
         android:gravity="center"
         android:textSize="45sp"
         android:textColor="#2C85D7"
-        android:text="@string/menu_go_list" />
+        android:contentDescription="@string/menu_go_list"
+        android:src="@drawable/qingdan"/>
 
 </LinearLayout>

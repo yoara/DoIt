@@ -1,8 +1,6 @@
 package yunhe.doit;
 
 
-import java.io.FileNotFoundException;
-
 import yunhe.database.UserInfoDBUtil;
 import yunhe.model.UserInfoModel;
 import yunhe.util.Constants;
@@ -20,7 +18,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.view.MenuItem;
@@ -28,11 +25,11 @@ import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.jeremyfeinstein.slidingmenu.lib.app.SlidingFragmentActivity;
 
 public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
-	private TextView mTvmain;
-	private TextView mTvList;
+	private ImageView mIvmain;
+	private ImageView mIvList;
 	private ImageView mIvInfo;
 	private ImageView mIvMenu;
-	private ImageView mIvSetting;
+	protected TextView mTvGoToday;
 	protected TextView mTvTitle;
 
 	/** 设置标题栏 **/
@@ -101,18 +98,19 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.activity_actionbar_frame);
         mTvTitle = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.actionbar_tv_title);
-        mTvTitle.setText(R.string.main_title);
+        mTvTitle.setBackground(getResources().getDrawable(R.drawable.dododoit));
+        
         mIvMenu = (ImageView) getSupportActionBar().getCustomView().findViewById(R.id.actionbar_iv_menu);
         mIvMenu.setOnClickListener(listener);
-        mIvSetting = (ImageView) getSupportActionBar().getCustomView().findViewById(R.id.actionbar_iv_setting);
-        mIvSetting.setOnClickListener(listener);
+        mTvGoToday = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.actionbar_iv_goToday);
+        mTvGoToday.setOnClickListener(listener);
         
 		mIvInfo = (ImageView) menu.findViewById(R.id.menu_iv_info);
 		mIvInfo.setOnClickListener(listener);
-		mTvmain = (TextView) menu.findViewById(R.id.menu_tv_main);
-		mTvmain.setOnClickListener(listener);
-		mTvList = (TextView) menu.findViewById(R.id.menu_tv_list);
-		mTvList.setOnClickListener(listener);
+		mIvmain = (ImageView) menu.findViewById(R.id.menu_tv_main);
+		mIvmain.setOnClickListener(listener);
+		mIvList = (ImageView) menu.findViewById(R.id.menu_tv_list);
+		mIvList.setOnClickListener(listener);
 	}
 	
 	/**所有按钮的监听器 **/
@@ -153,8 +151,8 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 			case R.id.actionbar_iv_menu:
 				toggle();
 				break;
-			case R.id.actionbar_iv_setting:
-				goSettingButton();
+			case R.id.actionbar_iv_goToday:
+				goToday();
 				break;
 			default:
 				break;
@@ -162,35 +160,10 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 		}
 	};
 	
-	
+	/** 回到今天 **/
+	protected abstract void goToday();
 	/** 设置当前layout **/
 	protected abstract void setOwnView();
-
-	/** 点击设置键 **/
-	protected void goSettingButton(){
-		 Intent intent = new Intent();  
-        /* 开启Pictures画面Type设定为image */  
-        intent.setType("image/*");  
-        /* 使用Intent.ACTION_GET_CONTENT这个Action */  
-        intent.setAction(Intent.ACTION_GET_CONTENT);   
-        /* 取得相片后返回本画面 */  
-        startActivityForResult(intent, 1);
-	}
-	
-	/**
-	 * goSettingButton选取图片后触发
-	 */
-	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (resultCode == RESULT_OK) {
-			Uri uri = data.getData();
-			UserInfoDBUtil db = UserInfoDBUtil.getInstance();
-			String path = null;
-			path = uri.toString();
-			db.updateBackgroundImg(path,this);
-		}
-		super.onActivityResult(requestCode, resultCode, data);
-	}
 
 	@Override
 	protected void onResume() {
@@ -224,10 +197,10 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
 			if(result==null){
 				if(_BaseSlidingActivity.this instanceof B_ListContentActivity){
 					findViewById(R.id.b_main_id)
-						.setBackgroundResource(R.drawable.ic_launcher);
+						.setBackgroundResource(R.drawable.bg);
 				}else{
 					findViewById(R.id.a_main_id)
-						.setBackgroundResource(R.drawable.ic_launcher);
+						.setBackgroundResource(R.drawable.bg);
 				}
 			}else{
 				if(_BaseSlidingActivity.this instanceof B_ListContentActivity){

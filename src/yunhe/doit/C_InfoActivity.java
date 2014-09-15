@@ -1,17 +1,21 @@
 package yunhe.doit;
 
 import java.util.Calendar;
+
 import yunhe.database.UserInfoDBUtil;
 import yunhe.model.UserInfoModel;
 import yunhe.util.Constants;
+import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
@@ -30,6 +34,7 @@ public class C_InfoActivity extends Activity {
 	EditText textDate;
 	EditText textMale;
 	CheckBox weibo;
+	ImageView setIv; 
 	boolean hasUserInfo = false;
 	
 	@Override
@@ -66,6 +71,9 @@ public class C_InfoActivity extends Activity {
 				}
 			}
 		});
+		
+		setIv = (ImageView) findViewById(R.id.info_lv_setting);
+		setIv.setOnClickListener(listener);
 		
 		TextView about = (TextView)findViewById(R.id.tv_info_showAbout);
 		about.setOnClickListener(listener);
@@ -147,6 +155,9 @@ public class C_InfoActivity extends Activity {
 			case R.id.tv_info_showAbout:
 				builder_about.show();
 				break;
+			case R.id.info_lv_setting:
+				goSettingButton();
+				break;
 			default:
 				break;
 			}
@@ -164,5 +175,30 @@ public class C_InfoActivity extends Activity {
 		}else{
 			dbUtil.saveToUserInfoDb(model, C_InfoActivity.this);
 		}
+	}
+	/** 点击设置键 **/
+	protected void goSettingButton(){
+		 Intent intent = new Intent();  
+        /* 开启Pictures画面Type设定为image */  
+        intent.setType("image/*");  
+        /* 使用Intent.ACTION_GET_CONTENT这个Action */  
+        intent.setAction(Intent.ACTION_GET_CONTENT);   
+        /* 取得相片后返回本画面 */  
+        startActivityForResult(intent, 1);
+	}
+	
+	/**
+	 * goSettingButton选取图片后触发
+	 */
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			Uri uri = data.getData();
+			UserInfoDBUtil db = UserInfoDBUtil.getInstance();
+			String path = null;
+			path = uri.toString();
+			db.updateBackgroundImg(path,this);
+		}
+		super.onActivityResult(requestCode, resultCode, data);
 	}
 }

@@ -8,4 +8,5 @@ public interface Constants {
 	
 	public final static String DETAIL_MODEL = "DETAIL_MODEL";
 	public final static String USERINFO_MODEL = "USERINFO_MODEL";
+	public final static String DATE_IN = "DATE_IN";
 }

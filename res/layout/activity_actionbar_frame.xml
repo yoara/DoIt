@@ -4,7 +4,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="horizontal" 
-    android:background="#2C85D7">
+    android:background="#FFFFFF">
 
     <ImageView
         android:id="@+id/actionbar_iv_menu"
@@ -21,15 +21,14 @@
         android:layout_weight="5"
         android:gravity="center"
         android:textSize="20sp"
-        android:textColor="#FFFFFF"
-        android:text="@string/main_title" />
+        android:textColor="#2C85D7"/>
 
-    <ImageView
-        android:id="@+id/actionbar_iv_setting"
+    <TextView
+        android:id="@+id/actionbar_iv_goToday"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
         android:contentDescription="@string/actionbar_go_setting"
-        android:src="@drawable/sheding" />
+        android:text="" />
 
 </LinearLayout>

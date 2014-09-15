@@ -20,7 +20,7 @@ public class LoadingActivity extends Activity {
 	class InternetLinkTask extends AsyncTask<Void,Void,Void>{
 		protected Void doInBackground(Void... params) {
 			try {
-				Thread.sleep(3000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {}
 			return null;
 		}

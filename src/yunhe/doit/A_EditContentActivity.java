@@ -1,10 +1,12 @@
 package yunhe.doit;
 
 import java.util.Calendar;
+import java.util.Date;
 
 import yunhe.database.ContentDBUtil;
 import yunhe.model.ContentModel;
 import yunhe.util.Constants;
+import yunhe.util.DateUtil;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
@@ -21,6 +23,11 @@ import android.widget.TimePicker;
 import android.widget.TimePicker.OnTimeChangedListener;
 
 public class A_EditContentActivity extends Activity {
+	private static int DATE_IN = 0;
+	
+	public static void setDATE_IN(int dateIn) {
+		DATE_IN = dateIn;
+	}
 	Dialog builder;
 	int year;
 	int day;
@@ -79,6 +86,7 @@ public class A_EditContentActivity extends Activity {
 	}
 	private void timeInit(DatePicker datepicker, TimePicker timepicker) {
 		Calendar c = Calendar.getInstance();
+		c.setTime(DateUtil.getAfterDateByDays(new Date(),DATE_IN));
 		year = c.get(Calendar.YEAR);
 		month = c.get(Calendar.MONTH);
 		day = c.get(Calendar.DAY_OF_MONTH);

@@ -279,10 +279,6 @@ public class SwipeDismissListView extends ListView {
 		animator.addListener(new AnimatorListenerAdapter() {
 			@Override
 			public void onAnimationEnd(Animator animation) {
-				if (onDismissCallback != null) {
-					onDismissCallback.onDismiss(dismissView,dismissPosition,isLeft);
-				}
-
 				//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
 				//所以我们在动画执行完毕之后将item设置回来
 				ViewHelper.setAlpha(dismissView, 1f);
@@ -290,7 +286,10 @@ public class SwipeDismissListView extends ListView {
 				ViewGroup.LayoutParams lp = dismissView.getLayoutParams();
 				lp.height = originalHeight;
 				dismissView.setLayoutParams(lp);
-
+				
+				if (onDismissCallback != null) {
+					onDismissCallback.onDismiss(dismissView,dismissPosition,isLeft);
+				}
 			}
 		});
 

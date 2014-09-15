@@ -64,7 +64,7 @@ public class DateUtil {
 		return dateFormat;
 	}
 	/**输出某天的0:00点钟的Date */
-	private static Date getZeroOfTheDay(Date date) {
+	public static Date getZeroOfTheDay(Date date) {
 		if (date == null)
 			return null;
 		Calendar cal = Calendar.getInstance();
@@ -84,7 +84,7 @@ public class DateUtil {
 		return newcal.getTime();
 	}
 	/** 返回给定日期前几天在某小时某分钟某秒的时间 */
-	private static Date getBeforeDateByDays(Date date, int beforedays) {
+	public static Date getBeforeDateByDays(Date date, int beforedays) {
 		if (date == null)
 			return null;
 		Calendar cal = Calendar.getInstance();
@@ -94,7 +94,7 @@ public class DateUtil {
 		return cal.getTime();
 	}
 	/** 返回给定日期前几天在某小时某分钟某秒的时间 */
-	private static Date getAfterDateByDays(Date date, int afterdays) {
+	public static Date getAfterDateByDays(Date date, int afterdays) {
 		return getBeforeDateByDays(date, -afterdays);
 	}
 }

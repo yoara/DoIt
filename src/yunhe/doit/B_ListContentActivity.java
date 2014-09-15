@@ -81,7 +81,7 @@ public class B_ListContentActivity extends _BaseSlidingActivity {
 				TextView tvDone = (TextView)convertView.findViewById(R.id.tv_b_contentlist_isdone);
 				TextView tvTitle = (TextView)convertView.findViewById(R.id.tv_b_contentlist_title);
 				if(tvDone.getText().equals(ContentModel.ISDONE)){
-					convertView.setBackgroundColor(Color.parseColor("#CCCCCC"));
+					convertView.setBackgroundColor(Color.TRANSPARENT);
 					tvTitle.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
 				}else{
 					if(position==0){
@@ -167,7 +167,5 @@ public class B_ListContentActivity extends _BaseSlidingActivity {
 		setContentView(R.layout.activity_b_list);
 	}
 	@Override
-	protected void goSettingButton() {
-		super.goSettingButton();
-	}
+	protected void goToday() {}
 }

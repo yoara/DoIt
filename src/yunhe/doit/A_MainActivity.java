@@ -47,14 +47,12 @@ import android.widget.Toast;
 @SuppressLint("ViewHolder")
 public class A_MainActivity extends _BaseSlidingActivity {
 	private GridView gridDate_day;
-	private GridView gridDate_week;
 	
 	/** 日期栏的数据list [0]日,[1]星期,[2]整体,[3]yyyy,[4]月**/
 	private List<String[]> dateList = new ArrayList<String[]>();
 	/** 偏差日期，初始加载为0 **/
 	private int dateRate = 0;
 	/** 日期栏的适配器，用于GridView容器的信息变更 **/
-	private GridViewAdapter adapter_week ;
 	private GridViewAdapter adapter_day ;
 	
 	private SwipeDismissListView listTitle;
@@ -64,6 +62,11 @@ public class A_MainActivity extends _BaseSlidingActivity {
 	List<Map<String, Object>> listItemAll = new ArrayList<Map<String, Object>>();
 	/** 信息栏的适配器，用于信息ListView容器的信息变更 **/
 	private SimpleAdapter listItemAdapter;
+	
+	public void setDATE_IN(int position) {
+		int dateIn = dateRate+position-DateUtil.returnTodayAround();
+		A_EditContentActivity.setDATE_IN(dateIn);
+	}
 	
 	@Override
 	public boolean onCreateOptionsMenu(com.actionbarsherlock.view.Menu menu) {
@@ -95,11 +98,8 @@ public class A_MainActivity extends _BaseSlidingActivity {
 
 	/** 初始化日期栏视图 **/
 	private void initGridDateView() {
-		gridDate_week = (GridView) findViewById(R.id.main_week_gv);
 		gridDate_day = (GridView) findViewById(R.id.main_day_gv);
 		
-		adapter_week = new GridViewAdapter(GridViewAdapter.WEEK);
-		gridDate_week.setAdapter(adapter_week);
 		adapter_day = new GridViewAdapter(GridViewAdapter.DAY);
 		gridDate_day.setAdapter(adapter_day);
 		
@@ -115,12 +115,6 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		int itemWidth = (int) (dm.widthPixels / dateList.size());
 		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
 				allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-		
-		gridDate_week.setLayoutParams(params);
-		gridDate_week.setColumnWidth(itemWidth);
-		gridDate_week.setHorizontalSpacing(0);
-		gridDate_week.setStretchMode(GridView.NO_STRETCH);
-		gridDate_week.setNumColumns(dateList.size());
 		
 		gridDate_day.setLayoutParams(params);
 		gridDate_day.setColumnWidth(itemWidth);
@@ -168,7 +162,7 @@ public class A_MainActivity extends _BaseSlidingActivity {
 				TextView tvTitle = (TextView)convertView.findViewById(R.id.tv_contentlist_title);
 				TextView tvTime = (TextView)convertView.findViewById(R.id.tv_contentlist_time);
 				if(tvDone.getText().equals(ContentModel.ISDONE)){
-					convertView.setBackgroundColor(Color.parseColor("#CCCCCC"));
+					convertView.setBackgroundColor(Color.TRANSPARENT);
 					tvTitle.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG); //中划线
 					tvTime.getPaint().setFlags(Paint. STRIKE_THRU_TEXT_FLAG);
 				}else{
@@ -273,19 +267,13 @@ public class A_MainActivity extends _BaseSlidingActivity {
             	}
             }
 
-			private void resetList() {
-				listItemAll.clear();
-				listItemAll.addAll(listItem);
-				listItemAll.addAll(listItemDone);
-				listItemAdapter.notifyDataSetChanged();
-			}
-
 			@Override
 			public void onEdit(int dismissPosition) {
 				goIntentEdit(dismissPosition);
 			}
         });  
 	}
+
 	/**
 	 * 跳转到编辑页面
 	 * **/
@@ -334,7 +322,7 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		/** 焦点变化产生的字体变化 **/
 		private void makeTextStyle(TextView tv,boolean focus){
 			if(focus){
-				tv.setTextColor(Color.parseColor("#FFFFFF"));
+				tv.setTextColor(Color.parseColor("#2C85D7"));
 				tv.getPaint().setFakeBoldText(true);
 			}else{
 				tv.setTextColor(Color.parseColor("#CCCCCC"));
@@ -359,6 +347,7 @@ public class A_MainActivity extends _BaseSlidingActivity {
 					textView = (TextView) convertView
 							.findViewById(R.id.main_date_week_item);
 					textView.setText(dateList.get(position)[1]);
+					
 					break;
 				default:
 					convertView = inflater.inflate(R.layout.a_main_listitem_date_day, null);
@@ -381,21 +370,17 @@ public class A_MainActivity extends _BaseSlidingActivity {
 					public boolean onTouch(View v, MotionEvent event) {
 						switch (event.getAction()){
 							case MotionEvent.ACTION_DOWN:
-								ContentDBUtil dbUtil = new ContentDBUtil();
 								for(int i=0;i<parent_final.getChildCount();i++){
 									if(parent_final.getChildAt(i)!=v){
 										makeTextStyle((TextView)parent_final.getChildAt(i),false);
+									}else{
+										setDATE_IN(i);
 									}
 								}
 								makeTextStyle((TextView)v,true);
-								listItemAll.clear();
 								String paramDate = DateUtil.returnDDMMMEEETo_yyyy_MM_dd(str);
-								listItemAll.addAll(dbUtil.queryContentForList(paramDate
-										,ContentModel.ISDONE_NOT, A_MainActivity.this));
-								listItemAll.addAll(dbUtil.queryContentForList(
-										DateUtil.returnDDMMMEEETo_yyyy_MM_dd(str)
-										,ContentModel.ISDONE, A_MainActivity.this));
-								listItemAdapter.notifyDataSetChanged();
+								
+								itemListChange(paramDate);
 								changeTitle(!DateUtil.checkTodayByYyyy_MM_dd(paramDate),position);
 								break;
 						}
@@ -406,7 +391,25 @@ public class A_MainActivity extends _BaseSlidingActivity {
 			return convertView;
 		}
 	}
-	
+	/** 改变内容框 **/
+	private void itemListChange(String paramDate) {
+		ContentDBUtil dbUtil = new ContentDBUtil();
+		listItemAll.clear();
+		listItem = dbUtil.queryContentForList(paramDate
+				,ContentModel.ISDONE_NOT, A_MainActivity.this);
+		listItemDone = dbUtil.queryContentForList(paramDate
+				,ContentModel.ISDONE, A_MainActivity.this);
+		listItemAll.addAll(listItem);
+		listItemAll.addAll(listItemDone);
+		listItemAdapter.notifyDataSetChanged();
+	}
+	/** 当日操作，改变被容框 **/
+	private void resetList() {
+		listItemAll.clear();
+		listItemAll.addAll(listItem);
+		listItemAll.addAll(listItemDone);
+		listItemAdapter.notifyDataSetChanged();
+	}
 	/**所有按钮的监听器 **/
 	private OnTouchListener gridlistener = new OnTouchListener() {
 		float x_tmp1 = 0.0f;
@@ -445,6 +448,10 @@ public class A_MainActivity extends _BaseSlidingActivity {
 											dateList = DateUtil.returnRoundMonth(dateRate);
 											changeTitle(dateRate!=0,DateUtil.returnTodayAround());
 											adapter_day.notifyDataSetChanged();
+											
+											String paramDate = DateUtil.returnDateTo_yyyy_MM_dd(DateUtil.getAfterDateByDays
+													(new Date(),dateRate));
+											itemListChange(paramDate);
 										}
 									});
 									
@@ -476,6 +483,10 @@ public class A_MainActivity extends _BaseSlidingActivity {
 											dateList = DateUtil.returnRoundMonth(dateRate);
 											changeTitle(dateRate!=0,DateUtil.returnTodayAround());
 											adapter_day.notifyDataSetChanged();
+											
+											String paramDate = DateUtil.returnDateTo_yyyy_MM_dd(DateUtil.getAfterDateByDays
+													(new Date(),dateRate));
+											itemListChange(paramDate);
 										}
 									});
 								}
@@ -500,30 +511,25 @@ public class A_MainActivity extends _BaseSlidingActivity {
 			String title = dateList.get(position)[3]
 					+"年"+dateList.get(position)[4]+"月" ;
 			mTvTitle.setText(title);
+			mTvTitle.setBackground(null);
+			mTvGoToday.setBackground(getResources().getDrawable(R.drawable.huijintian));
 		}else{
-			mTvTitle.setText(R.string.main_title);
+			//mTvTitle.setText(R.string.main_title);
+			mTvTitle.setText("");
+			mTvTitle.setBackground(getResources().getDrawable(R.drawable.dododoit));
+			mTvGoToday.setBackground(null);
 		}
 	}
 
 	@Override
-	protected void goSettingButton() {
-		super.goSettingButton();
+	protected void goToday() {
 		/** 回到当前日期 **/
-/*		dateRate = 0;
+		itemListChange(DateUtil.returnDateTo_yyyy_MM_dd(new Date()));
 		
-		ContentDBUtil dbUtil = new ContentDBUtil();
-		listItem.clear();
-		listItem.addAll(dbUtil.queryContentForList(DateUtil.returnDateTo_yyyy_MM_dd(new Date())
-				,ContentModel.ISDONE_NOT, A_MainActivity.this));
-		listItem.addAll(dbUtil.queryContentForList(
-				DateUtil.returnDateTo_yyyy_MM_dd(new Date())
-				,ContentModel.ISDONE, A_MainActivity.this));
-		listItemAdapter.notifyDataSetChanged();
 		changeTitle(false,-1);
-		
+		dateRate = 0;
 		dateList = DateUtil.returnRoundMonth(dateRate);
 		adapter_day.notifyDataSetChanged();
-		adapter_week.notifyDataSetChanged();*/
 		
 	}
 }
