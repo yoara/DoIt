@@ -112,7 +112,7 @@ public class A_EditContentActivity extends Activity {
 		sbDate.append(day);
 		StringBuffer sbTime = new StringBuffer();
 		sbTime.append(hour).append(":");
-		sbTime.append(minute);
+		sbTime.append(minute>9?minute:"0"+minute);
 		
 		textDate.setText(sbDate.toString());
 		textTime.setText(sbTime.toString());
@@ -148,6 +148,7 @@ public class A_EditContentActivity extends Activity {
 					return;
 				}
 				saveContentIntoDb();
+				builder.dismiss();
 				finish();
 				break;
 			case R.id.bt_saveContent_go:

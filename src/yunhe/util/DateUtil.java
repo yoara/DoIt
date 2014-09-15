@@ -9,9 +9,17 @@ import java.util.List;
 import java.util.Locale;
 
 public class DateUtil {
-	public final static int AROUNDDAY = 3; 
+	private static int AROUNDDAY = 3; 
 	private final static SimpleDateFormat sdf = new SimpleDateFormat("ddMMMEEEyyyyMM",Locale.ENGLISH);
 	private final static SimpleDateFormat sdf_yyyy_MM_dd = new SimpleDateFormat("yyyy-M-d");
+	
+	/** 获得今天的围绕位置 **/
+	public static int returnTodayAround(){
+		Calendar newcal = Calendar.getInstance();
+		AROUNDDAY = newcal.get(Calendar.DAY_OF_WEEK)-1;
+		return AROUNDDAY;
+	}
+	
 	public static List<String[]> returnRoundMonth(int dateRate) {
 		List<String[]> dateList = new ArrayList<String[]>();
 		Date today = getAfterDateByDays(getZeroOfTheDay(new Date()),dateRate);
@@ -19,7 +27,7 @@ public class DateUtil {
 			dateList.add(makeDateFormat(sdf.format(getBeforeDateByDays(today,i))));
 		}
 		dateList.add(makeDateFormat(sdf.format(today)));
-		for(int i=1;i<=AROUNDDAY;i++){
+		for(int i=1;i<=6-AROUNDDAY;i++){
 			dateList.add(makeDateFormat(sdf.format(getAfterDateByDays(today,i))));
 		}
 		return dateList;

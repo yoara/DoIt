@@ -6,19 +6,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
-
 import yunhe.database.ContentDBUtil;
 import yunhe.database.UserInfoDBUtil;
 import yunhe.model.ActivityShowContentModel;
 import yunhe.model.ContentModel;
-import yunhe.model.UserInfoModel;
 import yunhe.receiver.AlarmReceiver;
 import yunhe.util.Constants;
 import yunhe.util.DateUtil;
@@ -26,7 +23,7 @@ import yunhe.util.ListTitleGradientColorEnum;
 import yunhe.view.SwipeDismissListView;
 import yunhe.view.SwipeDismissListView.OnDismissCallback;
 import android.os.Bundle;
-import android.os.Handler;
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -34,9 +31,7 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
-import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -49,6 +44,7 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+@SuppressLint("ViewHolder")
 public class A_MainActivity extends _BaseSlidingActivity {
 	private GridView gridDate_day;
 	private GridView gridDate_week;
@@ -78,6 +74,8 @@ public class A_MainActivity extends _BaseSlidingActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		//初始化时间
+		DateUtil.returnTodayAround();
 		initView(getSlidingMenu());
 	}
 	@Override
@@ -352,7 +350,7 @@ public class A_MainActivity extends _BaseSlidingActivity {
 					textView = (TextView) convertView
 							.findViewById(R.id.main_date_day_item);
 					textView.setText(dateList.get(position)[0]);
-					if(DateUtil.AROUNDDAY==position){
+					if(DateUtil.returnTodayAround()==position){
 						makeTextStyle((TextView)convertView,true);
 					}
 					break;
@@ -367,7 +365,7 @@ public class A_MainActivity extends _BaseSlidingActivity {
 					textView = (TextView) convertView
 							.findViewById(R.id.main_date_day_item);
 					textView.setText(dateList.get(position)[0]);
-					if(DateUtil.AROUNDDAY==position){
+					if(DateUtil.returnTodayAround()==position){
 						makeTextStyle((TextView)convertView,true);
 					}
 					break;
@@ -390,11 +388,11 @@ public class A_MainActivity extends _BaseSlidingActivity {
 									}
 								}
 								makeTextStyle((TextView)v,true);
-								listItem.clear();
+								listItemAll.clear();
 								String paramDate = DateUtil.returnDDMMMEEETo_yyyy_MM_dd(str);
-								listItem.addAll(dbUtil.queryContentForList(paramDate
+								listItemAll.addAll(dbUtil.queryContentForList(paramDate
 										,ContentModel.ISDONE_NOT, A_MainActivity.this));
-								listItem.addAll(dbUtil.queryContentForList(
+								listItemAll.addAll(dbUtil.queryContentForList(
 										DateUtil.returnDDMMMEEETo_yyyy_MM_dd(str)
 										,ContentModel.ISDONE, A_MainActivity.this));
 								listItemAdapter.notifyDataSetChanged();
@@ -443,9 +441,9 @@ public class A_MainActivity extends _BaseSlidingActivity {
 											//所以我们在动画执行完毕之后将item设置回来
 											ViewHelper.setAlpha(paramView, 1f);
 											ViewHelper.setTranslationX(paramView, 0);
-											dateRate = dateRate+(DateUtil.AROUNDDAY*2+1);
+											dateRate = dateRate+7;
 											dateList = DateUtil.returnRoundMonth(dateRate);
-											changeTitle(dateRate!=0,DateUtil.AROUNDDAY);
+											changeTitle(dateRate!=0,DateUtil.returnTodayAround());
 											adapter_day.notifyDataSetChanged();
 										}
 									});
@@ -474,9 +472,9 @@ public class A_MainActivity extends _BaseSlidingActivity {
 											//所以我们在动画执行完毕之后将item设置回来
 											ViewHelper.setAlpha(paramView, 1f);
 											ViewHelper.setTranslationX(paramView, 0);
-											dateRate = dateRate-(DateUtil.AROUNDDAY*2+1);
+											dateRate = dateRate-7;
 											dateList = DateUtil.returnRoundMonth(dateRate);
-											changeTitle(dateRate!=0,DateUtil.AROUNDDAY);
+											changeTitle(dateRate!=0,DateUtil.returnTodayAround());
 											adapter_day.notifyDataSetChanged();
 										}
 									});
