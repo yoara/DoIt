@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ValueAnimator;
@@ -26,19 +25,14 @@ import android.os.Bundle;
 import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.GradientDrawable;
-import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -46,14 +40,21 @@ import android.widget.Toast;
 
 @SuppressLint("ViewHolder")
 public class A_MainActivity extends _BaseSlidingActivity {
-	private GridView gridDate_day;
-	
 	/** 日期栏的数据list [0]日,[1]星期,[2]整体,[3]yyyy,[4]月**/
 	private List<String[]> dateList = new ArrayList<String[]>();
 	/** 偏差日期，初始加载为0 **/
 	private int dateRate = 0;
-	/** 日期栏的适配器，用于GridView容器的信息变更 **/
-	private GridViewAdapter adapter_day ;
+	
+	private TextView main_day_01;
+	private TextView main_day_02;
+	private TextView main_day_03;
+	private TextView main_day_04;
+	private TextView main_day_05;
+	private TextView main_day_06;
+	private TextView main_day_07;
+	private List<TextView> textViewList = new ArrayList<TextView>(7);
+	private volatile int onclickTextView = -1;
+	private LinearLayout main_day_list;
 	
 	private SwipeDismissListView listTitle;
 	/** 信息栏的数据集合 **/
@@ -79,51 +80,68 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		super.onCreate(savedInstanceState);
 		//初始化时间
 		DateUtil.returnTodayAround();
-		initView(getSlidingMenu());
+		//初始化时间控件
+		main_day_list = (LinearLayout) findViewById(R.id.main_day_list);
+		main_day_01 = (TextView) findViewById(R.id.main_day_01);
+		main_day_02 = (TextView) findViewById(R.id.main_day_02);
+		main_day_03 = (TextView) findViewById(R.id.main_day_03);
+		main_day_04 = (TextView) findViewById(R.id.main_day_04);
+		main_day_05 = (TextView) findViewById(R.id.main_day_05);
+		main_day_06 = (TextView) findViewById(R.id.main_day_06);
+		main_day_07 = (TextView) findViewById(R.id.main_day_07);
+		main_day_01.setOnTouchListener(dateViewListen);
+		main_day_02.setOnTouchListener(dateViewListen);
+		main_day_03.setOnTouchListener(dateViewListen);
+		main_day_04.setOnTouchListener(dateViewListen);
+		main_day_05.setOnTouchListener(dateViewListen);
+		main_day_06.setOnTouchListener(dateViewListen);
+		main_day_07.setOnTouchListener(dateViewListen);
+		textViewList.add(main_day_01);
+		textViewList.add(main_day_02);
+		textViewList.add(main_day_03);
+		textViewList.add(main_day_04);
+		textViewList.add(main_day_05);
+		textViewList.add(main_day_06);
+		textViewList.add(main_day_07);
+		initView();
 	}
 	@Override
 	protected void onResume() {
 		super.onResume();
-		initView(getSlidingMenu());
+		initView();
 		
 		//增加默认加载项
 		UserInfoDBUtil db = UserInfoDBUtil.getInstance();
 		db.updateActivityFlag("A",this);
+		
+		if(onclickTextView!=-1){
+			makeViewShow(onclickTextView);
+		}
 	}
 	/** 初始化视图控件  **/
-	private void initView(SlidingMenu menu) {
-		initGridDateView();
+	private void initView() {
+		initDateView();
 		initListTitleView();
 	}
 
 	/** 初始化日期栏视图 **/
-	private void initGridDateView() {
-		gridDate_day = (GridView) findViewById(R.id.main_day_gv);
-		
-		adapter_day = new GridViewAdapter(GridViewAdapter.DAY);
-		gridDate_day.setAdapter(adapter_day);
-		
-		DisplayMetrics dm = new DisplayMetrics();
-		/*
-		 * DisplayMetrics可以得到分辨率等信息，方法如下：DisplayMetrics
-		 * metrics;getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		 * metrics.widthPixels 屏幕宽metrics.heightPixels 屏幕高metrics.density 屏幕密度
-		 */
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
+	private void initDateView() {
 		dateList = DateUtil.returnRoundMonth(dateRate);
-		int allWidth = (int) (dm.widthPixels);
-		int itemWidth = (int) (dm.widthPixels / dateList.size());
-		LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-				allWidth, LinearLayout.LayoutParams.MATCH_PARENT);
-		
-		gridDate_day.setLayoutParams(params);
-		gridDate_day.setColumnWidth(itemWidth);
-		gridDate_day.setHorizontalSpacing(0);
-		gridDate_day.setStretchMode(GridView.NO_STRETCH);
-		gridDate_day.setNumColumns(dateList.size());
-		gridDate_day.setOnTouchListener(gridlistener);
+		makeDateLinearLayout();
 	}
-	
+	/** 将日期数据设置到date TextView中 **/
+	private void makeDateLinearLayout() {
+		for(int i=0;i<textViewList.size();i++){
+			TextView textView = textViewList.get(i);
+			textView.setText(dateList.get(i)[0]);
+			if(DateUtil.returnTodayAround()==i){
+				makeTextStyle(textView,true);
+			}else{
+				makeTextStyle(textView,false);
+			}
+		}
+	}
+
 	/** 初始化信息栏视图 **/
 	private void initListTitleView() {
 		//查询结果
@@ -289,108 +307,128 @@ public class A_MainActivity extends _BaseSlidingActivity {
 			startActivity(intent_edit);
 		}
 	}
-	/** 日期栏的适配器，用于GridView容器的信息变更 **/
-	private class GridViewAdapter extends BaseAdapter {
-		public static final int DAY = 0;
-		public static final int WEEK = 1;
-		private int type;
-		public GridViewAdapter(int type) {
-			this.type = type;
-		}
-		/*
-		 * inflate这个方法总共有四种形式，目的都是把xml表述的layout转化为View对象。
-		 * 在android中如果想将xml中的Layout转换为View放入.java代码中操作，
-		 * 只能通过Inflater，而不能通过findViewById()。
-		 */
-		private LayoutInflater inflater = (LayoutInflater)
-				getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	
+	private OnTouchListener dateViewListen = new OnTouchListener() {
+		float x_tmp1 = 0.0f;
+		float x_tmp2 = 0.0f;
 		@Override
-		public int getCount() {
-			return dateList.size();
-		}
+		public boolean onTouch(View v, MotionEvent event) {
+			/**
+			 * 判断是向左还是滑动方向
+			 */
+			//获取当前坐标
+			float x = event.getX();
+			switch (event.getAction()){
+				case MotionEvent.ACTION_DOWN:
+					x_tmp1 = x;
+					for(int i=0;i<textViewList.size();i++){
+						TextView here = textViewList.get(i);
+						if(here.getId()==(v.getId())){
+							makeViewShow(i);
+							onclickTextView = i;
+						}
+					}
+					break;
+				case MotionEvent.ACTION_UP:
+					x_tmp2 = x;
+					if(x_tmp1 - x_tmp2 > 50){	//往左
+						onclickTextView = -1;
+						ViewPropertyAnimator.animate(main_day_list)
+							.translationX(x_tmp2 - x_tmp1)
+							.setDuration(500).setListener(new AnimatorListenerAdapter() {
+								@Override
+								public void onAnimationEnd(Animator animation) {
+									ValueAnimator animator = ValueAnimator.ofInt(main_day_list.getHeight(), 0).setDuration(50);
+									animator.start();
 
-		@Override
-		public Object getItem(int position) {
-			return dateList.get(position);
-		}
+									animator.addListener(new AnimatorListenerAdapter() {
+										@Override
+										public void onAnimationEnd(Animator animation) {
+											//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
+											//所以我们在动画执行完毕之后将item设置回来
+											ViewHelper.setAlpha(main_day_list, 1f);
+											ViewHelper.setTranslationX(main_day_list, 0);
+											dateRate = dateRate+7;
+											dateList = DateUtil.returnRoundMonth(dateRate);
+											changeTitle(dateRate!=0,DateUtil.returnTodayAround());
+											makeDateLinearLayout();
+											
+											String paramDate = DateUtil.returnDateTo_yyyy_MM_dd(DateUtil.getAfterDateByDays
+													(new Date(),dateRate));
+											itemListChange(paramDate);
+										}
+									});
+									
+//									ViewPropertyAnimator.animate(paramView)
+//										.translationX(0).alpha(1)
+//										.setDuration(50);
 
-		@Override
-		public long getItemId(int position) {
-			return position;
-		}
+								}
+						});
+						
+					}
+					if(x_tmp2 - x_tmp1 > 50){	//往右
+						onclickTextView = -1;
+						ViewPropertyAnimator.animate(main_day_list)
+							.translationX(x_tmp2 - x_tmp1)
+							.setDuration(500).setListener(new AnimatorListenerAdapter() {
+								@Override
+								public void onAnimationEnd(Animator animation) {
+									ValueAnimator animator = ValueAnimator.ofInt(main_day_list.getHeight(), 0).setDuration(50);
+									animator.start();
 
-		/** 焦点变化产生的字体变化 **/
-		private void makeTextStyle(TextView tv,boolean focus){
-			if(focus){
-				tv.setTextColor(Color.parseColor("#2C85D7"));
-				tv.getPaint().setFakeBoldText(true);
-			}else{
-				tv.setTextColor(Color.parseColor("#CCCCCC"));
+									animator.addListener(new AnimatorListenerAdapter() {
+										@Override
+										public void onAnimationEnd(Animator animation) {
+											//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
+											//所以我们在动画执行完毕之后将item设置回来
+											ViewHelper.setAlpha(main_day_list, 1f);
+											ViewHelper.setTranslationX(main_day_list, 0);
+											dateRate = dateRate-7;
+											dateList = DateUtil.returnRoundMonth(dateRate);
+											changeTitle(dateRate!=0,DateUtil.returnTodayAround());
+											makeDateLinearLayout();
+											
+											String paramDate = DateUtil.returnDateTo_yyyy_MM_dd(DateUtil.getAfterDateByDays
+													(new Date(),dateRate));
+											itemListChange(paramDate);
+										}
+									});
+								}
+						});
+					}
+					break;
+			}
+			return true;
+		}
+	};
+	
+	/** 通过index调整view焦点 **/
+	private void makeViewShow(int i) {
+		setDATE_IN(i);
+		makeTextStyle(textViewList.get(i),true);
+		final String[] str = dateList.get(i);
+		String paramDate = DateUtil.returnDDMMMEEETo_yyyy_MM_dd(str);
+		itemListChange(paramDate);
+		changeTitle(!DateUtil.checkTodayByYyyy_MM_dd(paramDate),i);
+		for(int j=0;j<textViewList.size();j++){
+			if(j!=i){
+				makeTextStyle(textViewList.get(j),false);
 			}
 		}
 		
-		@Override
-		public View getView(final int position, View convertView, ViewGroup parent) {
-			TextView textView = null;
-			switch(type){
-				case DAY:
-					convertView = inflater.inflate(R.layout.a_main_listitem_date_day, null);
-					textView = (TextView) convertView
-							.findViewById(R.id.main_date_day_item);
-					textView.setText(dateList.get(position)[0]);
-					if(DateUtil.returnTodayAround()==position){
-						makeTextStyle((TextView)convertView,true);
-					}
-					break;
-				case WEEK:
-					convertView = inflater.inflate(R.layout.a_main_listitem_date_week, null);
-					textView = (TextView) convertView
-							.findViewById(R.id.main_date_week_item);
-					textView.setText(dateList.get(position)[1]);
-					
-					break;
-				default:
-					convertView = inflater.inflate(R.layout.a_main_listitem_date_day, null);
-					textView = (TextView) convertView
-							.findViewById(R.id.main_date_day_item);
-					textView.setText(dateList.get(position)[0]);
-					if(DateUtil.returnTodayAround()==position){
-						makeTextStyle((TextView)convertView,true);
-					}
-					break;
-			}
-
-			final String[] str = dateList.get(position);
-			
-			final ViewGroup parent_final = parent;
-			//只监听日期adapter
-			if(type==DAY){
-				convertView.setOnTouchListener((new OnTouchListener() {
-					@Override
-					public boolean onTouch(View v, MotionEvent event) {
-						switch (event.getAction()){
-							case MotionEvent.ACTION_DOWN:
-								for(int i=0;i<parent_final.getChildCount();i++){
-									if(parent_final.getChildAt(i)!=v){
-										makeTextStyle((TextView)parent_final.getChildAt(i),false);
-									}else{
-										setDATE_IN(i);
-									}
-								}
-								makeTextStyle((TextView)v,true);
-								String paramDate = DateUtil.returnDDMMMEEETo_yyyy_MM_dd(str);
-								
-								itemListChange(paramDate);
-								changeTitle(!DateUtil.checkTodayByYyyy_MM_dd(paramDate),position);
-								break;
-						}
-						return false;
-					}
-				}));
-			}
-			return convertView;
+	}
+	
+	/** 焦点变化产生的字体变化 **/
+	private void makeTextStyle(TextView tv,boolean focus){
+		if(focus){
+			tv.setTextColor(Color.parseColor("#2C85D7"));
+			tv.getPaint().setFakeBoldText(true);
+		}else{
+			tv.setTextColor(Color.parseColor("#CCCCCC"));
 		}
 	}
+	
 	/** 改变内容框 **/
 	private void itemListChange(String paramDate) {
 		ContentDBUtil dbUtil = new ContentDBUtil();
@@ -410,93 +448,6 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		listItemAll.addAll(listItemDone);
 		listItemAdapter.notifyDataSetChanged();
 	}
-	/**所有按钮的监听器 **/
-	private OnTouchListener gridlistener = new OnTouchListener() {
-		float x_tmp1 = 0.0f;
-		float x_tmp2 = 0.0f;
-		@Override
-		public boolean onTouch(final View paramView, MotionEvent event) {
-			/**
-			 * 判断是向左还是滑动方向
-			 */
-			//获取当前坐标
-			float x = event.getX();
-			switch (event.getAction()){
-				case MotionEvent.ACTION_DOWN:
-					x_tmp1 = x;
-					break;
-				case MotionEvent.ACTION_UP:
-					x_tmp2 = x;
-					
-					if(x_tmp1 - x_tmp2 > 50){	//往左
-						ViewPropertyAnimator.animate(paramView)
-							.translationX(x_tmp2 - x_tmp1)
-							.setDuration(500).setListener(new AnimatorListenerAdapter() {
-								@Override
-								public void onAnimationEnd(Animator animation) {
-									ValueAnimator animator = ValueAnimator.ofInt(paramView.getHeight(), 0).setDuration(50);
-									animator.start();
-
-									animator.addListener(new AnimatorListenerAdapter() {
-										@Override
-										public void onAnimationEnd(Animator animation) {
-											//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
-											//所以我们在动画执行完毕之后将item设置回来
-											ViewHelper.setAlpha(paramView, 1f);
-											ViewHelper.setTranslationX(paramView, 0);
-											dateRate = dateRate+7;
-											dateList = DateUtil.returnRoundMonth(dateRate);
-											changeTitle(dateRate!=0,DateUtil.returnTodayAround());
-											adapter_day.notifyDataSetChanged();
-											
-											String paramDate = DateUtil.returnDateTo_yyyy_MM_dd(DateUtil.getAfterDateByDays
-													(new Date(),dateRate));
-											itemListChange(paramDate);
-										}
-									});
-									
-//									ViewPropertyAnimator.animate(paramView)
-//										.translationX(0).alpha(1)
-//										.setDuration(50);
-
-								}
-						});
-						
-					}
-					if(x_tmp2 - x_tmp1 > 50){	//往右
-						ViewPropertyAnimator.animate(paramView)
-							.translationX(x_tmp2 - x_tmp1)
-							.setDuration(500).setListener(new AnimatorListenerAdapter() {
-								@Override
-								public void onAnimationEnd(Animator animation) {
-									ValueAnimator animator = ValueAnimator.ofInt(paramView.getHeight(), 0).setDuration(50);
-									animator.start();
-
-									animator.addListener(new AnimatorListenerAdapter() {
-										@Override
-										public void onAnimationEnd(Animator animation) {
-											//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
-											//所以我们在动画执行完毕之后将item设置回来
-											ViewHelper.setAlpha(paramView, 1f);
-											ViewHelper.setTranslationX(paramView, 0);
-											dateRate = dateRate-7;
-											dateList = DateUtil.returnRoundMonth(dateRate);
-											changeTitle(dateRate!=0,DateUtil.returnTodayAround());
-											adapter_day.notifyDataSetChanged();
-											
-											String paramDate = DateUtil.returnDateTo_yyyy_MM_dd(DateUtil.getAfterDateByDays
-													(new Date(),dateRate));
-											itemListChange(paramDate);
-										}
-									});
-								}
-						});
-					}
-					break;
-			}
-			return false;
-		}
-	};
 
 	@Override
 	protected void setOwnView() {
@@ -529,7 +480,6 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		changeTitle(false,-1);
 		dateRate = 0;
 		dateList = DateUtil.returnRoundMonth(dateRate);
-		adapter_day.notifyDataSetChanged();
-		
+		makeDateLinearLayout();
 	}
 }

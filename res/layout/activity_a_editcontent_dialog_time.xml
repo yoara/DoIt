@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" 
+    android:layout_gravity="center_vertical|center_horizontal">
+   	<net.simonvt.numberpicker.NumberPicker
+        android:id="@+id/editcontent_date_hour"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:layout_gravity="center_vertical|center_horizontal"/>
+   	<net.simonvt.numberpicker.NumberPicker
+        android:id="@+id/editcontent_date_minute"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" 
+        android:layout_gravity="center_vertical|center_horizontal"/>
+</LinearLayout>

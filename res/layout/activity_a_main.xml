@@ -57,19 +57,63 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/main_day_list"
         android:layout_width="match_parent"
         android:layout_weight="0.80"
         android:layout_height="0dp"
         android:background="#FFFFFF"
         android:orientation="horizontal" >
         
-	    <GridView
-	        android:id="@+id/main_day_gv"
-	        android:layout_width="match_parent"
-	        android:layout_height="match_parent"
-	        android:layout_gravity="center"
-	        android:gravity="center" >
-	    </GridView>
+        <TextView 
+            android:id="@+id/main_day_01"
+            android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+        	android:layout_gravity="center"
+	        android:gravity="center" />
+        <TextView 
+            android:id="@+id/main_day_02"
+            android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+        	android:layout_gravity="center"
+	        android:gravity="center" />
+        <TextView 
+            android:id="@+id/main_day_03"
+            android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+        	android:layout_gravity="center"
+	        android:gravity="center" />
+        <TextView 
+            android:id="@+id/main_day_04"
+            android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+        	android:layout_gravity="center"
+	        android:gravity="center" />
+        <TextView 
+            android:id="@+id/main_day_05"
+            android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+        	android:layout_gravity="center"
+	        android:gravity="center" />
+        <TextView 
+            android:id="@+id/main_day_06"
+            android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+        	android:layout_gravity="center"
+	        android:gravity="center"  />
+        <TextView 
+            android:id="@+id/main_day_07"
+            android:layout_width="0dp"
+        	android:layout_height="match_parent"
+        	android:layout_weight="1"
+        	android:layout_gravity="center"
+	        android:gravity="center"  />
+
     </LinearLayout>
 
     <LinearLayout

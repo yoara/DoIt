@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="60dp"
+    android:layout_height="55dp"
     android:minHeight="?android:attr/listPreferredItemHeight" >
 
     <TextView
         android:id="@+id/tv_content_split"
         android:layout_width="10dp"
-        android:layout_height="60dp"/>
+        android:layout_height="55dp"/>
     <TextView
         android:id="@+id/tv_contentlist_time"
         android:layout_width="100dp"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:layout_toRightOf="@+id/tv_content_split"
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
@@ -20,38 +20,28 @@
     <TextView
         android:id="@+id/tv_contentlist_title"
         android:layout_width="200dp"
-        android:layout_height="60dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
+        android:layout_height="55dp"
         android:layout_toRightOf="@+id/tv_contentlist_time"
-        android:layout_alignBaseline="@+id/tv_contentlist_time"
-        android:layout_alignBottom="@+id/tv_contentlist_time"
-        android:gravity="center_vertical"
         android:textColor="#2C85D7"
-        android:textSize="25sp" />
-
-
+        android:gravity="center_vertical"
+        android:layout_marginRight="48dp"
+        android:textSize="17sp" />
     <TextView
         android:id="@+id/tv_contentlist_isdone"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_alignBaseline="@+id/tv_contentlist_time"
-        android:layout_alignBottom="@+id/tv_contentlist_time"
         android:layout_toRightOf="@+id/tv_contentlist_time"/>
     <TextView
         android:id="@+id/tv_contentlist_isalarm"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_alignBaseline="@+id/tv_contentlist_isdone"
-        android:layout_alignBottom="@+id/tv_contentlist_isdone"
         android:layout_toRightOf="@+id/tv_contentlist_isdone"/>
     <ImageView
         android:id="@+id/iv_alarm"
         android:layout_width="wrap_content"
-        android:layout_height="60dp"
+        android:layout_height="55dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="32dp"
         android:visibility="gone"
         android:src="@drawable/nao" />
 

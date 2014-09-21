@@ -37,7 +37,9 @@
             android:launchMode="singleTask"
             >
         </activity>
-        <activity android:name="A_EditContentActivity"/>
+        <activity android:name="A_EditContentActivity"
+            android:theme="@style/SampleTheme.Light"
+            />
         <activity android:name="B_ListContentActivity"
             android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
             android:uiOptions="splitActionBarWhenNarrow"

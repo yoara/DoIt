@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -88,7 +89,9 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
         menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
         menu.setFadeDegree(0.55f);
         //设置菜单拉出的距离
-        menu.setBehindOffset(120);
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        menu.setBehindOffset(dm.widthPixels/2);
         //如果使用继承SlidingFragmentActivity方式，不需要这几行
 		//SlidingMenu menu = new SlidingMenu(this);
         //menu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
