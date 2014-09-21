@@ -32,7 +32,7 @@
         
         <activity
             android:name=".A_MainActivity"
-            android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
+            android:theme="@style/MyActivityStyle"
             android:uiOptions="splitActionBarWhenNarrow"
             android:launchMode="singleTask"
             >
@@ -41,13 +41,14 @@
             android:theme="@style/SampleTheme.Light"
             />
         <activity android:name="B_ListContentActivity"
-            android:theme="@style/Theme.Sherlock.Light.DarkActionBar"
+            android:theme="@style/MyActivityStyle"
             android:uiOptions="splitActionBarWhenNarrow"
             android:launchMode="singleTask"
             />
         <activity android:name="B_EditContentActivity"
             />
         <activity android:name="C_InfoActivity"
+            android:theme="@style/SampleTheme.Light"
             />
     </application>
 

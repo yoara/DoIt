@@ -2,17 +2,19 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
     
-
-    <DatePicker
-        android:id="@+id/dp_c_date_datePicker"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/bt_c_info_saveDate"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/bt_editcontent_selectDate" />
+   	<net.simonvt.numberpicker.NumberPicker
+        android:id="@+id/c_date_year"
+        android:layout_width="match_parent"
+   		android:layout_height="match_parent"
+        />
+   	<net.simonvt.numberpicker.NumberPicker
+        android:id="@+id/c_date_month"
+        android:layout_width="match_parent"
+   		android:layout_height="match_parent" />
+   	<net.simonvt.numberpicker.NumberPicker
+        android:id="@+id/c_date_day"
+        android:layout_width="match_parent"
+   		android:layout_height="match_parent" />
 </LinearLayout>

@@ -35,6 +35,7 @@
         android:id="@+id/et_c_info_editDate"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:cursorVisible="false"
         android:ems="10" />
 
     <TextView

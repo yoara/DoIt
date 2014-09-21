@@ -333,75 +333,62 @@ public class A_MainActivity extends _BaseSlidingActivity {
 					x_tmp2 = x;
 					if(x_tmp1 - x_tmp2 > 50){	//往左
 						onclickTextView = -1;
-						ViewPropertyAnimator.animate(main_day_list)
-							.translationX(x_tmp2 - x_tmp1)
-							.setDuration(500).setListener(new AnimatorListenerAdapter() {
-								@Override
-								public void onAnimationEnd(Animator animation) {
-									ValueAnimator animator = ValueAnimator.ofInt(main_day_list.getHeight(), 0).setDuration(50);
-									animator.start();
-
-									animator.addListener(new AnimatorListenerAdapter() {
-										@Override
-										public void onAnimationEnd(Animator animation) {
-											//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
-											//所以我们在动画执行完毕之后将item设置回来
-											ViewHelper.setAlpha(main_day_list, 1f);
-											ViewHelper.setTranslationX(main_day_list, 0);
-											dateRate = dateRate+7;
-											dateList = DateUtil.returnRoundMonth(dateRate);
-											changeTitle(dateRate!=0,DateUtil.returnTodayAround());
-											makeDateLinearLayout();
-											
-											String paramDate = DateUtil.returnDateTo_yyyy_MM_dd(DateUtil.getAfterDateByDays
-													(new Date(),dateRate));
-											itemListChange(paramDate);
-										}
-									});
-									
-//									ViewPropertyAnimator.animate(paramView)
-//										.translationX(0).alpha(1)
-//										.setDuration(50);
-
-								}
-						});
-						
+						changeViewListToLeft();
 					}
 					if(x_tmp2 - x_tmp1 > 50){	//往右
 						onclickTextView = -1;
-						ViewPropertyAnimator.animate(main_day_list)
-							.translationX(x_tmp2 - x_tmp1)
-							.setDuration(500).setListener(new AnimatorListenerAdapter() {
-								@Override
-								public void onAnimationEnd(Animator animation) {
-									ValueAnimator animator = ValueAnimator.ofInt(main_day_list.getHeight(), 0).setDuration(50);
-									animator.start();
-
-									animator.addListener(new AnimatorListenerAdapter() {
-										@Override
-										public void onAnimationEnd(Animator animation) {
-											//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
-											//所以我们在动画执行完毕之后将item设置回来
-											ViewHelper.setAlpha(main_day_list, 1f);
-											ViewHelper.setTranslationX(main_day_list, 0);
-											dateRate = dateRate-7;
-											dateList = DateUtil.returnRoundMonth(dateRate);
-											changeTitle(dateRate!=0,DateUtil.returnTodayAround());
-											makeDateLinearLayout();
-											
-											String paramDate = DateUtil.returnDateTo_yyyy_MM_dd(DateUtil.getAfterDateByDays
-													(new Date(),dateRate));
-											itemListChange(paramDate);
-										}
-									});
-								}
-						});
+						changeViewListToRight();
 					}
 					break;
 			}
 			return true;
 		}
+		private void changeViewListToLeft() {
+			runView(true);
+		}
+		private void runView(final boolean flag){
+			for(int i=6;i>=0;i--){
+				final int index = i;
+				ViewPropertyAnimator.animate(textViewList.get(i))
+				.translationX((x_tmp2 - x_tmp1)*((flag?i:6-i)+2.0f)/10)
+				.setDuration(500).setListener(new AnimatorListenerAdapter() {
+					@Override
+					public void onAnimationEnd(Animator animation) {
+						ValueAnimator animator = ValueAnimator.ofInt(textViewList.get(index).getHeight(), 0).setDuration(50);
+						animator.start();
+						animator.addListener(new AnimatorListenerAdapter() {
+							@Override
+							public void onAnimationEnd(Animator animation) {
+								//这段代码很重要，因为我们并没有将item从ListView中移除，而是将item的高度设置为0
+								//所以我们在动画执行完毕之后将item设置回来
+								ViewHelper.setAlpha(textViewList.get(index), 1f);
+								ViewHelper.setTranslationX(textViewList.get(index), 0);
+								
+								if(index==0){
+									if(flag){
+										dateRate = dateRate+7;
+									}else{
+										dateRate = dateRate-7;
+									}
+									dateList = DateUtil.returnRoundMonth(dateRate);
+									changeTitle(dateRate!=0,DateUtil.returnTodayAround());
+									makeDateLinearLayout();
+									
+									String paramDate = DateUtil.returnDateTo_yyyy_MM_dd(DateUtil.getAfterDateByDays
+											(new Date(),dateRate));
+									itemListChange(paramDate);
+								}
+							}
+						});
+					}
+				});
+			}
+		}
+		private void changeViewListToRight() {
+			runView(false);
+		}
 	};
+	
 	
 	/** 通过index调整view焦点 **/
 	private void makeViewShow(int i) {

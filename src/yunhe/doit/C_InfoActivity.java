@@ -2,6 +2,8 @@ package yunhe.doit;
 
 import java.util.Calendar;
 
+import net.simonvt.numberpicker.NumberPicker;
+import net.simonvt.numberpicker.NumberPicker.OnValueChangeListener;
 import yunhe.database.UserInfoDBUtil;
 import yunhe.model.UserInfoModel;
 import yunhe.util.Constants;
@@ -18,13 +20,14 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.DatePicker.OnDateChangedListener;
 import android.widget.TextView;
 
 public class C_InfoActivity extends Activity {
-	Dialog builder;
+	Dialog builder_date;
+	NumberPicker dateYear;
+	NumberPicker dateMonth;
+	NumberPicker dateDay;
 	Dialog builder_male ;
 	Dialog builder_about ;
 	int year;
@@ -42,13 +45,11 @@ public class C_InfoActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_c_info);
 
-		builder = new Dialog(C_InfoActivity.this, R.style.dialog);
-		builder.setContentView(R.layout.c_info_date_dialog);
+		builder_date = new Dialog(C_InfoActivity.this, R.style.dialog);
+		builder_date.setContentView(R.layout.c_info_date_dialog);
 		
 		builder_male = new Dialog(C_InfoActivity.this, R.style.dialog);
 		builder_male.setContentView(R.layout.c_info_male_dialog);
-		Button saveDate = (Button) builder.findViewById(R.id.bt_c_info_saveDate);
-		saveDate.setOnClickListener(listener);
 		Button saveMale_girl = (Button) builder_male.findViewById(R.id.bt_c_male_girl);
 		Button saveMale_boy = (Button) builder_male.findViewById(R.id.bt_c_male_boy);
 		saveMale_girl.setOnClickListener(listener);
@@ -79,9 +80,13 @@ public class C_InfoActivity extends Activity {
 		about.setOnClickListener(listener);
 		builder_about = new Dialog(C_InfoActivity.this, R.style.dialog);
 		builder_about.setContentView(R.layout.c_info_about_dialog);
-		
-		DatePicker datepicker = (DatePicker) builder.findViewById(R.id.dp_c_date_datePicker);
-		timeInit(datepicker);
+		dateYear = (NumberPicker) builder_date.findViewById(R.id.c_date_year);
+		initNumberPicker(dateYear,2014,1970,year_picker);
+		dateMonth = (NumberPicker) builder_date.findViewById(R.id.c_date_month);
+		initNumberPicker(dateMonth,12,1,month_picker);
+		dateDay = (NumberPicker) builder_date.findViewById(R.id.c_date_day);
+		initNumberPicker(dateDay,31,1,day_picker);
+		timeInit();
 		
 		Button save_info = (Button) findViewById(R.id.bt_c_info_save);
 		save_info.setOnClickListener(listener);
@@ -101,26 +106,57 @@ public class C_InfoActivity extends Activity {
 			}
 		}
 	}
-	private void timeInit(DatePicker datepicker) {
+	
+	private static final int year_picker = 0;
+	private static final int month_picker = 1;
+	private static final int day_picker = 2;
+	private void initNumberPicker(NumberPicker np, int maxValue, int minValue,int type) {
+		np.setMaxValue(maxValue);
+		np.setMinValue(minValue);
+		np.setFocusable(true);
+		np.setFocusableInTouchMode(true);
+		np.setOnValueChangedListener(new HereOnValueChangeListener(type));
+	}
+	private class HereOnValueChangeListener implements OnValueChangeListener{
+		private int type;
+		
+		public HereOnValueChangeListener(int type){
+			this.type = type;
+		}
+		@Override
+		public void onValueChange(NumberPicker picker, int oldVal,
+				int newVal) {
+			switch (type) {
+			case year_picker:
+				C_InfoActivity.this.year = newVal;
+				break;
+			case month_picker:
+				C_InfoActivity.this.month = newVal;
+				break;
+			case day_picker:
+				C_InfoActivity.this.day = newVal;
+				break;
+			default:
+				break;
+			}
+			setDate();
+		}
+	};
+	
+	private void timeInit() {
 		Calendar c = Calendar.getInstance();
 		year = c.get(Calendar.YEAR);
 		month = c.get(Calendar.MONTH);
 		day = c.get(Calendar.DAY_OF_MONTH);
 		setDate();
-		datepicker.init(year, month, day, new OnDateChangedListener() {
-			@Override
-			public void onDateChanged(DatePicker view, int year,
-					int monthOfYear, int dayOfMonth) {
-				C_InfoActivity.this.year = year;
-				C_InfoActivity.this.month = monthOfYear;
-				C_InfoActivity.this.day = dayOfMonth;
-			}
-		});
+		dateYear.setValue(year);
+		dateMonth.setValue(month+1);
+		dateDay.setValue(day);
 	}
 	final private void setDate(){
 		StringBuffer sbDate = new StringBuffer();
 		sbDate.append(year).append("-");
-		sbDate.append(month+1).append("-");
+		sbDate.append(month).append("-");
 		sbDate.append(day);
 		textDate.setText(sbDate.toString());
 	}
@@ -135,14 +171,10 @@ public class C_InfoActivity extends Activity {
 				finish();
 				break;
 			case R.id.et_c_info_editDate:
-				builder.show();
+				builder_date.show();
 				break;
 			case R.id.et_c_info_male:
 				builder_male.show();
-				break;
-			case R.id.bt_c_info_saveDate:
-				setDate();
-				builder.hide();
 				break;
 			case R.id.bt_c_male_girl:
 				builder_male.hide();

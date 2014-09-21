@@ -15,4 +15,8 @@
         <item name="homeAsUpIndicator">@drawable/new_indicator</item>
         <item name="android:homeAsUpIndicator">@drawable/new_indicator</item>
     </style>
+    
+	<style name="MyActivityStyle" parent="@style/Theme.Sherlock.Light.DarkActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
 </resources>

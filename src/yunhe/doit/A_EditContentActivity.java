@@ -12,8 +12,13 @@ import yunhe.util.DateUtil;
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.Button;
@@ -43,7 +48,6 @@ public class A_EditContentActivity extends Activity {
 	NumberPicker dateYear;
 	NumberPicker dateMonth;
 	NumberPicker dateDay;
-	Dialog builder_time;
 	NumberPicker dateHour;
 	NumberPicker dateMinute;
 	
@@ -63,18 +67,19 @@ public class A_EditContentActivity extends Activity {
 		
 		builder_date = new Dialog(A_EditContentActivity.this, R.style.dialog);
 		builder_date.setContentView(R.layout.activity_a_editcontent_dialog_date);
+		Window dialogWindow = builder_date.getWindow();
+        dialogWindow.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.BOTTOM);
+        dialogWindow.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#000000")));
+        
 		dateYear = (NumberPicker) builder_date.findViewById(R.id.editcontent_date_year);
-		initNumberPicker(dateYear,2014,1970,year_picker);
+		initNumberPicker(dateYear,2020,2010,year_picker);
 		dateMonth = (NumberPicker) builder_date.findViewById(R.id.editcontent_date_month);
 		initNumberPicker(dateMonth,12,1,month_picker);
 		dateDay = (NumberPicker) builder_date.findViewById(R.id.editcontent_date_day);
 		initNumberPicker(dateDay,31,1,day_picker);
-		
-		builder_time = new Dialog(A_EditContentActivity.this, R.style.dialog);
-		builder_time.setContentView(R.layout.activity_a_editcontent_dialog_time);
-		dateHour = (NumberPicker) builder_time.findViewById(R.id.editcontent_date_hour);
+		dateHour = (NumberPicker) builder_date.findViewById(R.id.editcontent_date_hour);
 		initNumberPicker(dateHour,23,0,hour_picker);
-		dateMinute = (NumberPicker) builder_time.findViewById(R.id.editcontent_date_minute);
+		dateMinute = (NumberPicker) builder_date.findViewById(R.id.editcontent_date_minute);
 		initNumberPicker(dateMinute,59,0,minute_picker);
 		timeInit();
 		
@@ -161,7 +166,7 @@ public class A_EditContentActivity extends Activity {
 	final private void setDate(){
 		StringBuffer sbDate = new StringBuffer();
 		sbDate.append(year).append("-");
-		sbDate.append(month+1>9?month+1:"0"+(month+1)).append("-");
+		sbDate.append(month).append("-");
 		sbDate.append(day);
 		StringBuffer sbTime = new StringBuffer();
 		sbTime.append(hour).append(":");
@@ -181,7 +186,7 @@ public class A_EditContentActivity extends Activity {
 				builder_date.show();
 				break;
 			case R.id.et_editTime:
-				builder_time.show();
+				builder_date.show();
 				break;
 			default:
 				break;
@@ -202,7 +207,6 @@ public class A_EditContentActivity extends Activity {
 				}
 				saveContentIntoDb();
 				builder_date.dismiss();
-				builder_time.dismiss();
 				finish();
 				break;
 			case R.id.bt_saveContent_go:

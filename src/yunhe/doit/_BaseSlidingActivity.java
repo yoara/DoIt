@@ -9,7 +9,9 @@ import android.app.AlertDialog.Builder;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -100,6 +102,8 @@ public abstract class _BaseSlidingActivity extends SlidingFragmentActivity  {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(R.layout.activity_actionbar_frame);
+        getSupportActionBar().setSplitBackgroundDrawable(new ColorDrawable(Color.parseColor("#2C85D7")));
+        
         mTvTitle = (TextView) getSupportActionBar().getCustomView().findViewById(R.id.actionbar_tv_title);
         mTvTitle.setBackground(getResources().getDrawable(R.drawable.dododoit));
         

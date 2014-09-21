@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="55dp"
-    android:minHeight="?android:attr/listPreferredItemHeight" >
+    android:minHeight="?android:attr/listPreferredItemHeight" 
+    >
 
     <TextView
         android:id="@+id/tv_content_split"
@@ -16,7 +17,7 @@
         android:gravity="center_vertical"
         android:paddingLeft="12dp"
         android:textColor="#2C85D7"
-        android:textSize="25sp"/>
+        android:textSize="26sp"/>
     <TextView
         android:id="@+id/tv_contentlist_title"
         android:layout_width="200dp"
@@ -25,7 +26,7 @@
         android:textColor="#2C85D7"
         android:gravity="center_vertical"
         android:layout_marginRight="48dp"
-        android:textSize="17sp" />
+        android:textSize="16sp" />
     <TextView
         android:id="@+id/tv_contentlist_isdone"
         android:layout_width="0dp"
