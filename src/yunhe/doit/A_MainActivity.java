@@ -6,11 +6,13 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import com.nineoldandroids.animation.Animator;
 import com.nineoldandroids.animation.AnimatorListenerAdapter;
 import com.nineoldandroids.animation.ValueAnimator;
 import com.nineoldandroids.view.ViewHelper;
 import com.nineoldandroids.view.ViewPropertyAnimator;
+
 import yunhe.database.ContentDBUtil;
 import yunhe.database.UserInfoDBUtil;
 import yunhe.model.ActivityShowContentModel;
@@ -26,8 +28,10 @@ import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
 import android.view.MotionEvent;
 import android.view.View;
@@ -96,6 +100,18 @@ public class A_MainActivity extends _BaseSlidingActivity {
 		main_day_05.setOnTouchListener(dateViewListen);
 		main_day_06.setOnTouchListener(dateViewListen);
 		main_day_07.setOnTouchListener(dateViewListen);
+		
+		AssetManager mgr=getAssets();//得到AssetManager
+		Typeface tf=Typeface.createFromAsset(mgr, "fonts/100.otf");//根据路径得到Typeface
+		
+		main_day_01.setTypeface(tf);
+		main_day_02.setTypeface(tf);
+		main_day_03.setTypeface(tf);
+		main_day_04.setTypeface(tf);
+		main_day_05.setTypeface(tf);
+		main_day_06.setTypeface(tf);
+		main_day_07.setTypeface(tf);
+		
 		textViewList.add(main_day_01);
 		textViewList.add(main_day_02);
 		textViewList.add(main_day_03);
@@ -413,6 +429,7 @@ public class A_MainActivity extends _BaseSlidingActivity {
 			tv.getPaint().setFakeBoldText(true);
 		}else{
 			tv.setTextColor(Color.parseColor("#CCCCCC"));
+			tv.getPaint().setFakeBoldText(false);
 		}
 	}
 	

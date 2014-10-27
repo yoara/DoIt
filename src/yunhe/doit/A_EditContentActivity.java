@@ -150,17 +150,17 @@ public class A_EditContentActivity extends Activity {
 		Calendar c = Calendar.getInstance();
 		c.setTime(DateUtil.getAfterDateByDays(new Date(),DATE_IN));
 		year = c.get(Calendar.YEAR);
-		month = c.get(Calendar.MONTH);
+		month = c.get(Calendar.MONTH)+1;
 		day = c.get(Calendar.DAY_OF_MONTH);
 		hour = c.get(Calendar.HOUR_OF_DAY);
 		minute = c.get(Calendar.MINUTE);
-		setDate();
-		
 		dateYear.setValue(year);
-		dateMonth.setValue(month+1);
+		dateMonth.setValue(month);
 		dateDay.setValue(day);
 		dateHour.setValue(hour);
 		dateMinute.setValue(minute);
+		setDate();
+		
 	}
 	
 	final private void setDate(){

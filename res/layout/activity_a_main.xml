@@ -71,49 +71,57 @@
         	android:layout_height="match_parent"
         	android:layout_weight="1"
         	android:layout_gravity="center"
-	        android:gravity="center" />
+	        android:gravity="center"
+	        android:textSize="24sp"
+	         />
         <TextView 
             android:id="@+id/main_day_02"
             android:layout_width="0dp"
         	android:layout_height="match_parent"
         	android:layout_weight="1"
         	android:layout_gravity="center"
-	        android:gravity="center" />
+	        android:gravity="center" 
+	        android:textSize="24sp"/>
         <TextView 
             android:id="@+id/main_day_03"
             android:layout_width="0dp"
         	android:layout_height="match_parent"
         	android:layout_weight="1"
         	android:layout_gravity="center"
-	        android:gravity="center" />
+	        android:gravity="center" 
+	        android:textSize="24sp"/>
         <TextView 
             android:id="@+id/main_day_04"
             android:layout_width="0dp"
         	android:layout_height="match_parent"
         	android:layout_weight="1"
         	android:layout_gravity="center"
-	        android:gravity="center" />
+	        android:gravity="center" 
+	        android:textSize="24sp"/>
         <TextView 
             android:id="@+id/main_day_05"
             android:layout_width="0dp"
         	android:layout_height="match_parent"
         	android:layout_weight="1"
         	android:layout_gravity="center"
-	        android:gravity="center" />
+	        android:gravity="center" 
+	        android:textSize="24sp"/>
         <TextView 
             android:id="@+id/main_day_06"
             android:layout_width="0dp"
         	android:layout_height="match_parent"
         	android:layout_weight="1"
         	android:layout_gravity="center"
-	        android:gravity="center"  />
+	        android:gravity="center"  
+	        android:textSize="24sp"/>
         <TextView 
             android:id="@+id/main_day_07"
             android:layout_width="0dp"
         	android:layout_height="match_parent"
         	android:layout_weight="1"
         	android:layout_gravity="center"
-	        android:gravity="center"  />
+	        android:gravity="center"  
+	        android:textSize="24sp"/>
 
     </LinearLayout>
 

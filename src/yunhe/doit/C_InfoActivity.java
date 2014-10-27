@@ -146,12 +146,12 @@ public class C_InfoActivity extends Activity {
 	private void timeInit() {
 		Calendar c = Calendar.getInstance();
 		year = c.get(Calendar.YEAR);
-		month = c.get(Calendar.MONTH);
+		month = c.get(Calendar.MONTH)+1;
 		day = c.get(Calendar.DAY_OF_MONTH);
-		setDate();
 		dateYear.setValue(year);
-		dateMonth.setValue(month+1);
+		dateMonth.setValue(month);
 		dateDay.setValue(day);
+		setDate();
 	}
 	final private void setDate(){
 		StringBuffer sbDate = new StringBuffer();

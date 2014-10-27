@@ -3,8 +3,8 @@
 
     <string name="app_name">DoIt</string>
     <string name="menu_settings">Settings</string>
-    <string name="version">2.7</string>
-    <string name="loadingWord1">version 2.7</string>
+    <string name="version">2.8</string>
+    <string name="loadingWord1">version 2.8</string>
     <string name="loadingWord2">by yunhe</string>
 
     <!-- main activity -->
